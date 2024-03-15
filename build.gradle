@@ -169,3 +169,29 @@ task cleanMergedJars() {
 }
 // add cleanMergedJars to the end of the "clean" task
 tasks["clean"].finalizedBy(cleanMergedJars)
+
+apply plugin: 'maven-publish'
+
+publishing {
+    repositories {
+        maven {
+            credentials {
+                username = "$mrmelon54_maven_usr"
+                password = "$mrmelon54_maven_pwd"
+            }
+
+            url = "https://maven.mrmelon54.com/releases"
+        }
+    }
+
+    publications {
+        maven(MavenPublication) {
+            from components.java
+
+            pom {
+                name = 'OmniPlay'
+                description = 'Cross-version modding API'
+            }
+        }
+    }
+}
