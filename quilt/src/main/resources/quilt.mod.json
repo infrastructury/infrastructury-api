@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "mixin": [
+    "omniplay.mixins.json",
+    "omniplay-common.mixins.json"
+  ],
+  "quilt_loader": {
+    "group": "${group}",
+    "id": "omniplay",
+    "version": "${version}",
+    "metadata": {
+      "name": "OmniPlay",
+      "description": "${description}",
+      "contributors": {
+        "MrMelon54": "Owner"
+      },
+      "contact": {
+        "homepage": "https://mrmelon54.com/minecraft/omniplay",
+        "sources": "https://github.com/mrmelon54/omniplay",
+        "issues": "https://github.com/mrmelon54/omniplay/issues"
+      },
+      "license": "GPL-3.0-only",
+      "icon": "icon.png"
+    },
+    "intermediate_mappings": "net.fabricmc:intermediary",
+    "entrypoints": {
+      "init": [
+        "com.mrmelon54.OmniPlay.quilt.OmniPlayQuilt"
+      ],
+      "modmenu": [
+        "com.mrmelon54.OmniPlay.fabriclike.ModMenuIntegration"
+      ]
+    },
+    "depends": [
+      {
+        "id": "quilt_loader",
+        "version": "*"
+      },
+      {
+        "id": "quilt_base",
+        "version": "*"
+      },
+      {
+        "id": "minecraft",
+        "version": $compatible_minecraft_versions
+      },
+      {
+        "id": "architectury",
+        "version": ">=${architectury_version}"
+      },
+      {
+        "id": "cloth-config",
+        "version": ">=${cloth_config_version}"
+      }
+    ]
+  },
+  "minecraft": {
+    "environment": "client"
+  }
+}

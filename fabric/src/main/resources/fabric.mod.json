@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "omniplay",
+  "version": "${version}",
+  "name": "OmniPlay",
+  "description": "${description}",
+  "authors": [
+    "MrMelon54"
+  ],
+  "contact": {
+    "homepage": "https://mrmelon54.com/minecraft/omniplay",
+    "sources": "https://github.com/mrmelon54/omniplay",
+    "issues": "https://github.com/mrmelon54/omniplay/issues"
+  },
+  "license": "GPL-3.0-only",
+  "icon": "icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "main": [
+      "com.mrmelon54.OmniPlay.fabric.OmniPlayFabric"
+    ],
+    "modmenu": [
+      "com.mrmelon54.OmniPlay.fabriclike.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "omniplay.mixins.json",
+    "omniplay-common.mixins.json"
+  ],
+  "depends": {
+    "fabric": "*",
+    "minecraft": $compatible_minecraft_versions,
+    "architectury": ">=${architectury_version}",
+    "cloth-config${cloth_config_old}": ">=${cloth_config_version}"
+  }
+}

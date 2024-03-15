@@ -1,0 +1,67 @@
+pluginManagement {
+    repositories {
+        maven { url "https://maven.fabricmc.net/" }
+        maven { url "https://maven.architectury.dev/" }
+        maven { url "https://maven.minecraftforge.net/" }
+        maven { url "https://maven.neoforged.net/releases/" }
+        gradlePluginPortal()
+    }
+}
+
+// Loads the version.properties
+def loadProperties() {
+    def defaultMcVersion = "1.20.1" // 1.20.1 is our current most stable version so we use that if no version was defined
+
+    def mcVersion = ""
+    def mcVers = fileTree("versionProperties").files.name // Get all the files in "versionProperties"
+    for (int i = 0; i < mcVers.size(); i++) {
+        mcVers[i] = mcVers[i].replaceAll("\\.properties", "") // As we are getting the file names, we should remove the ".properties" at the end to get the versions
+    }
+
+    mcVers.sort() // Sort so it always goes from oldest to newest
+
+    int mcIndex = -1
+    println "Avalible MC versions: ${mcVers}"
+    if (hasProperty("mcVer")) {
+        mcVersion = mcVer
+        mcIndex = mcVers.indexOf(mcVer)
+    }
+    if (mcIndex == -1) {
+        println "No mcVer set or the set mcVer is invalid! Defaulting to ${defaultMcVersion}."
+        println "Tip: Use -PmcVer=\"${defaultMcVersion}\" in cmd arg to set mcVer."
+        mcVersion = defaultMcVersion
+        mcIndex = mcVers.indexOf(defaultMcVersion)
+        assert mcIndex != -1
+    }
+
+    println "Loading properties file at " + mcVersion + ".properties"
+    def props = new Properties()
+    props.load(new FileInputStream("$rootDir/versionProperties/" + "$mcVersion" + ".properties"))
+
+    props.each { prop ->
+        gradle.ext.set(prop.key, prop.value)
+        // println "Added prop [key:" + prop.key + ", value:" + prop.value + "]"
+    }
+    gradle.ext.mcVers = mcVers
+    gradle.ext.mcIndex = mcIndex
+}
+
+loadProperties()
+
+
+// include projects
+include("common")
+
+var builds_for = ((String) gradle.builds_for).split(",")
+
+// include fabric-like when using fabric or quilt
+if (builds_for.contains("fabric") || builds_for.contains("quilt"))
+    include("fabric-like")
+
+for (loader in builds_for) {
+    def l = loader.strip() // Strip it in case a space is added before or after the comma
+    println "Adding loader " + l
+    include(l)
+}
+
+rootProject.name = "omniplay"
