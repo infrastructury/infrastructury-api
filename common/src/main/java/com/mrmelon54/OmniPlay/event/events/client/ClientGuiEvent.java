@@ -10,6 +10,7 @@ import com.mrmelon54.OmniPlay.event.EventWrapper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
 
 import java.util.List;
 
@@ -37,16 +38,16 @@ public interface ClientGuiEvent {
         return guiGraphics;
     }
     #endif
-}
 
-@Environment(EnvType.CLIENT)
-interface RenderHud {
-    /**
-     * Invoked after the in-game hud has been rendered.
-     * Equivalent to Forge's {@code RenderGameOverlayEvent.Post@ElementType#ALL} and Fabric's {@code HudRenderCallback}.
-     *
-     * @param graphics  The graphics context.
-     * @param tickDelta The tick delta.
-     */
-    void renderHud(GuiGraphics graphics, float tickDelta);
+    @Environment(EnvType.CLIENT)
+    interface RenderHud {
+        /**
+         * Invoked after the in-game hud has been rendered.
+         * Equivalent to Forge's {@code RenderGameOverlayEvent.Post@ElementType#ALL} and Fabric's {@code HudRenderCallback}.
+         *
+         * @param graphics  The graphics context.
+         * @param tickDelta The tick delta.
+         */
+        void renderHud(GuiGraphics graphics, float tickDelta);
+    }
 }
