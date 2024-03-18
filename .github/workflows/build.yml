@@ -29,16 +29,30 @@ jobs:
           distribution: "temurin"
       - name: Build
         run: ./buildsingle.sh "${{ matrix.mc }}"
-      - name: Publish Release
-        if: startsWith(github.ref, 'refs/tags/v')
-        run: MAVEN_PASS="${{ secrets.MAVEN_PASS }}" MAVEN_TYPE=prod ./gradlew publish -PmcVer="${{ matrix.mc }}" --no-daemon
-      - name: Publish Snapshot
-        run: MAVEN_PASS="${{ secrets.MAVEN_PASS }}" ./gradlew publish -PmcVer="${{ matrix.mc }}" --no-daemon
       - uses: actions/upload-artifact@v4
         with:
           name: "buildAllJars-${{matrix.mc}}"
           path: buildAllJars/*.jar
           if-no-files-found: error
+
+  publish:
+    needs: resolve-versions
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.resolve-versions.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: "17"
+          distribution: "temurin"
+      - name: Publish Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: MAVEN_PASS="${{ secrets.MAVEN_PASS }}" MAVEN_TYPE=prod ./gradlew publish -PmcVer="${{ matrix.mc }}" --no-daemon
+      - name: Publish Snapshot
+        run: MAVEN_PASS="${{ secrets.MAVEN_PASS }}" ./gradlew publish -PmcVer="${{ matrix.mc }}" --no-daemon
 
   deploy:
     needs: build
