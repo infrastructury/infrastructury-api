@@ -11,7 +11,4 @@ done
 
 versionsJson=$(jo -a -- "${versions[@]}")
 
-if [ "$1" != "plain" ]; then
-  echo -n 'matrix='
-fi
-echo "{\"include\":${versionsJson}}"
+echo "matrix={\"include\":${versionsJson}}"
