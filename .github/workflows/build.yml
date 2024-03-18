@@ -50,7 +50,7 @@ jobs:
           distribution: "temurin"
       - name: Publish Release
         if: startsWith(github.ref, 'refs/tags/v')
-        run: MAVEN_PASS="${{ secrets.MAVEN_PASS }}" MAVEN_TYPE=prod ./gradlew publish -PmcVer="${{ matrix.mc }}" --no-daemon
+        run: MAVEN_PASS="${{ secrets.MAVEN_PASS }}" MAVEN_TYPE=production ./gradlew publish -PmcVer="${{ matrix.mc }}" --no-daemon
       - name: Publish Snapshot
         run: MAVEN_PASS="${{ secrets.MAVEN_PASS }}" ./gradlew publish -PmcVer="${{ matrix.mc }}" --no-daemon
 
@@ -74,5 +74,5 @@ jobs:
         run: |
           #!/bin/bash
           while read -r filename; do
-            curl --fail -X POST -H "Authorization: Bearer ${{ secrets.DEPLOY }}" -F "upload=@$filename" https://api.mrmelon54.com/v1/mc-upload/upload/clock-hud
+            curl --fail -X POST -H "Authorization: Bearer ${{ secrets.DEPLOY }}" -F "upload=@$filename" https://api.mrmelon54.com/v1/mc-upload/upload/omniplay
           done < <(find ./buildAllJars/ -name '*.jar' -type f)
