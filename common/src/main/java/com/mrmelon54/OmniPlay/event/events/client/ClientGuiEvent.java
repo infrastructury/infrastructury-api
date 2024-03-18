@@ -10,7 +10,10 @@ import com.mrmelon54.OmniPlay.event.EventWrapper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphics;
+
+#if MC_VER < MC_1_20_1
 import com.mojang.blaze3d.vertex.PoseStack;
+#endif
 
 import java.util.List;
 

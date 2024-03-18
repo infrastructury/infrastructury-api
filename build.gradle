@@ -165,10 +165,11 @@ allprojects {
                     username = "melon"
                     password = System.getenv("MAVEN_PASS")
                 }
-                if(System.getenv("MAVEN_TYPE") == "production")
-                    url = "https://maven.mrmelon54.com/releases"
-                else
-                    url = "https://maven.mrmelon54.com/snapshots"
+                switch (System.getenv("MAVEN_TYPE")) {
+                    case "production": url = "https://maven.mrmelon54.com/releases"; break
+                    case "development": url = "http://localhost:8080/snapshots"; break
+                    default: url = "https://maven.mrmelon54.com/snapshots"; break
+                }
             }
         }
     }

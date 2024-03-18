@@ -1,5 +1,7 @@
 package com.mrmelon54.OmniPlay;
 
+import com.mrmelon54.OmniPlay.util.ConfigScreenRegistrar;
+import dev.architectury.injectables.annotations.ExpectPlatform;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.minecraft.client.Minecraft;
@@ -12,7 +14,7 @@ public class OmniPlay {
     public static ConfigStructure CONFIG = AutoConfig.register(ConfigStructure.class, JanksonConfigSerializer::new).get();
 
     public static void init() {
-        // TODO
+        registerConfigScreen((mc, screen) -> createConfigScreen(screen).get());
     }
 
     public static Supplier<Screen> createConfigScreen(Screen screen) {
@@ -20,10 +22,15 @@ public class OmniPlay {
     }
 
     public static boolean showDebugScreen() {
-        #if MC_VER > MC_1_20_1
-        return Minecraft.getInstance().gui.getDebugOverlay().showDebugScreen();
-        #else
+        #if MC_VER < MC_1_20_2
         return Minecraft.getInstance().options.renderDebug;
+        #else
+        return Minecraft.getInstance().gui.getDebugOverlay().showDebugScreen();
         #endif
+    }
+
+    @ExpectPlatform
+    public static void registerConfigScreen(ConfigScreenRegistrar registrar) {
+        throw new AssertionError();
     }
 }
