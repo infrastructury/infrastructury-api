@@ -14,7 +14,6 @@ def writeBuildGradlePredefine(List<String> mcVers, int mcIndex) {
 
     sb.append("# DON'T TOUCH THIS FILE, This is handled by the build script\n");
 
-
     for (int i = 0; i < mcVers.size(); i++) {
         String verStr = mcVers[i].replace(".", "_");
         sb.append("MC_" + verStr + "=" + i.toString() + "\n");
@@ -23,11 +22,10 @@ def writeBuildGradlePredefine(List<String> mcVers, int mcIndex) {
             sb.append("MC_VER=" + i.toString() + "\n");
     }
 
-
     new File(projectDir, "build.properties").text = sb.toString()
 }
 
-def generateForgeVersions(mc_versions) {
+static def generateForgeVersions(mc_versions) {
     def json = new JsonSlurper().parseText(mc_versions) as List<String>
     if (json.size() == 0) {
         return "error"
@@ -52,7 +50,8 @@ architectury {
     minecraft = rootProject.minecraft_version
 }
 
-subprojects {
+subprojects { p ->
+    apply plugin: "java"
     apply plugin: "dev.architectury.loom"
     apply plugin: "systems.manifold.manifold-gradle-plugin"
 
@@ -60,14 +59,63 @@ subprojects {
         silentMojangMappingsLicense()
     }
 
+    // set up custom configurations (configurations are a way to handle dependencies)
+    configurations {
+        // extends the shadowJar configuration
+        shadowMe
+        // have implemented dependencies automatically embedded in the final jar
+        implementation.extendsFrom(shadowMe)
+
+        forgeShadowMe
+        implementation.extendsFrom(forgeShadowMe)
+        shadowMe.extendsFrom(forgeShadowMe)
+        forgeRuntimeLibrary.extendsFrom(forgeShadowMe)
+
+        if (p != project(":common")) {
+            // Shadow common
+            common
+            shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
+            compileClasspath.extendsFrom common
+            runtimeClasspath.extendsFrom common
+            if (findProject(":forge"))
+                developmentForge.extendsFrom common
+            if (findProject(":neoforge"))
+                developmentNeoForge.extendsFrom common
+            compileClasspath.extendsFrom coreProjects
+            runtimeClasspath.extendsFrom coreProjects
+            if (findProject(":forge"))
+                developmentForge.extendsFrom coreProjects
+            if (findProject(":neoforge"))
+                developmentNeoForge.extendsFrom coreProjects
+
+            if (findProject(":fabric-like") && p != project(":fabric-like")) {
+                // Shadow fabricLike
+                fabricLike
+                shadowFabricLike
+                compileClasspath.extendsFrom fabricLike
+                runtimeClasspath.extendsFrom fabricLike
+            }
+        }
+    }
+
     dependencies {
         annotationProcessor("systems.manifold:manifold-preprocessor:${rootProject.manifold_version}")
 
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
-        // The following line declares the mojmap mappings, you may use other mappings as well
-        mappings loom.officialMojangMappings()
-        // The following line declares the yarn mappings you may select this one as well.
-        // mappings "net.fabricmc:yarn:1.19.4+build.2:v2"
+        mappings loom.layered() {
+            officialMojangMappings()
+            parchment("org.parchmentmc.data:parchment-${rootProject.parchment_version}@zip")
+        }
+
+        if (p != project(":common")) {
+            common(project(":common")) { transitive false }
+            shadowCommon(project(":common")) { transitive false }
+
+            if (findProject(":fabric-like") && p != project(":fabric-like")) {
+                fabricLike(project(path: ":fabric-like")) { transitive false }
+                shadowFabricLike(project(path: ":fabric-like")) { transitive false }
+            }
+        }
     }
 }
 
@@ -88,6 +136,7 @@ allprojects {
         // for more information about repositories.
         maven { url "https://maven.shedaniel.me/" }
         maven { url "https://maven.terraformersmc.com/releases/" }
+        maven { url "https://maven.parchmentmc.org" }
     }
 
     tasks.withType(JavaCompile) {
@@ -107,6 +156,21 @@ allprojects {
 
     java {
         withSourcesJar()
+    }
+
+    publishing {
+        repositories {
+            maven {
+                credentials {
+                    username = "melon"
+                    password = System.getenv("MAVEN_PASS")
+                }
+                if(System.getenv("MAVEN_TYPE") == "production")
+                    url = "https://maven.mrmelon54.com/releases"
+                else
+                    url = "https://maven.mrmelon54.com/snapshots"
+            }
+        }
     }
 }
 
@@ -134,6 +198,8 @@ forgix {
             projectName = "neoforge"
             jarLocation = "build/libs/${project.archives_base_name}-neoforge-${rootProject.versionStr}.jar"
         }
+
+    removeDuplicate "com.mrmelon54.omniplay"
 }
 
 def getVersionMetadata() {
@@ -169,29 +235,3 @@ task cleanMergedJars() {
 }
 // add cleanMergedJars to the end of the "clean" task
 tasks["clean"].finalizedBy(cleanMergedJars)
-
-apply plugin: 'maven-publish'
-
-publishing {
-    repositories {
-        maven {
-            credentials {
-                username = "$mrmelon54_maven_usr"
-                password = "$mrmelon54_maven_pwd"
-            }
-
-            url = "https://maven.mrmelon54.com/releases"
-        }
-    }
-
-    publications {
-        maven(MavenPublication) {
-            from components.java
-
-            pom {
-                name = 'OmniPlay'
-                description = 'Cross-version modding API'
-            }
-        }
-    }
-}

@@ -4,6 +4,7 @@ pluginManagement {
         maven { url "https://maven.architectury.dev/" }
         maven { url "https://maven.minecraftforge.net/" }
         maven { url "https://maven.neoforged.net/releases/" }
+        maven { url "https://maven.parchmentmc.org" }
         gradlePluginPortal()
     }
 }
@@ -59,7 +60,7 @@ if (builds_for.contains("fabric") || builds_for.contains("quilt"))
     include("fabric-like")
 
 for (loader in builds_for) {
-    def l = loader.strip() // Strip it in case a space is added before or after the comma
+    def l = loader.strip()
     println "Adding loader " + l
     include(l)
 }

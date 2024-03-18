@@ -12,10 +12,17 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: "17"
-          distribution: "adopt"
+          distribution: "temurin"
 
       - name: Build
         run: ./gradlew build
+
+      - name: Publish Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: MAVEN_TYPE=production ./gradlew publish
+
+      - name: Publish Snapshot
+        run: ./gradlew publish
 
       - name: Deploy
         if: startsWith(github.ref, 'refs/tags/v')

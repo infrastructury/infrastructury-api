@@ -31,11 +31,6 @@ dependencies {
     modApi("com.terraformersmc:modmenu:${rootProject.modmenu_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
-    common(project(path: ":fabric-like", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":fabric-like", configuration: "transformProductionFabric")) { transitive false }
 }
 
 processResources {
@@ -48,7 +43,7 @@ processResources {
                 "architectury_version": rootProject.architectury_version,
                 "cloth_config_version": rootProject.cloth_config_version,
                 "cloth_config_old": (rootProject.mcVer == "1.16.5" || rootProject.mcVer == "1.17.1") ? "2" : ""
-     }
+    }
 }
 
 shadowJar {
