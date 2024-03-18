@@ -199,7 +199,7 @@ forgix {
             jarLocation = "build/libs/${project.archives_base_name}-neoforge-${rootProject.versionStr}.jar"
         }
 
-    removeDuplicate "com.mrmelon54.omniplay"
+    //removeDuplicate "com.mrmelon54.omniplay"
 }
 
 def getVersionMetadata() {
