@@ -28,7 +28,7 @@
         "com.mrmelon54.OmniPlay.quilt.OmniPlayQuilt"
       ],
       "modmenu": [
-        "com.mrmelon54.OmniPlay.fabriclike.ModMenuIntegration"
+        "com.mrmelon54.OmniPlay.ModMenuIntegration"
       ]
     },
     "depends": [

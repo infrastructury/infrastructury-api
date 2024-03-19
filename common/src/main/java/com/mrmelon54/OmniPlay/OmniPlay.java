@@ -7,6 +7,7 @@ import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 
+import java.util.*;
 import java.util.function.Supplier;
 
 public class OmniPlay {

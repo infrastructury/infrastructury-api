@@ -87,14 +87,6 @@ subprojects { p ->
                 developmentForge.extendsFrom coreProjects
             if (findProject(":neoforge"))
                 developmentNeoForge.extendsFrom coreProjects
-
-            if (findProject(":fabric-like") && p != project(":fabric-like")) {
-                // Shadow fabricLike
-                fabricLike
-                shadowFabricLike
-                compileClasspath.extendsFrom fabricLike
-                runtimeClasspath.extendsFrom fabricLike
-            }
         }
     }
 
@@ -110,11 +102,6 @@ subprojects { p ->
         if (p != project(":common")) {
             common(project(":common")) { transitive false }
             shadowCommon(project(":common")) { transitive false }
-
-            if (findProject(":fabric-like") && p != project(":fabric-like")) {
-                fabricLike(project(path: ":fabric-like")) { transitive false }
-                shadowFabricLike(project(path: ":fabric-like")) { transitive false }
-            }
         }
     }
 }
@@ -199,6 +186,8 @@ forgix {
             projectName = "neoforge"
             jarLocation = "build/libs/${project.archives_base_name}-neoforge-${rootProject.versionStr}.jar"
         }
+
+    removeDuplicate "com.mrmelon54.OmniPlay"
 }
 
 def getVersionMetadata() {

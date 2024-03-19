@@ -1,6 +1,5 @@
-package com.mrmelon54.OmniPlay.fabriclike;
+package com.mrmelon54.OmniPlay;
 
-import com.mrmelon54.OmniPlay.ConfigStructure;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 import me.shedaniel.autoconfig.AutoConfig;

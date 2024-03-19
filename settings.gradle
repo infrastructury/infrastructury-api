@@ -55,10 +55,6 @@ include("common")
 
 var builds_for = ((String) gradle.builds_for).split(",")
 
-// include fabric-like when using fabric or quilt
-if (builds_for.contains("fabric") || builds_for.contains("quilt"))
-    include("fabric-like")
-
 for (loader in builds_for) {
     def l = loader.strip()
     println "Adding loader " + l
