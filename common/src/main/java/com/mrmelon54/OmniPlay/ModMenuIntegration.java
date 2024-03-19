@@ -10,6 +10,6 @@ import net.fabricmc.api.Environment;
 public class ModMenuIntegration implements ModMenuApi {
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return parent -> AutoConfig.getConfigScreen(ConfigStructure.class, parent).get();
+        return parent -> OmniPlay.createConfigScreen(parent).get();
     }
 }
