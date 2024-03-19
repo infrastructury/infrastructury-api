@@ -100,10 +100,15 @@ subprojects { p ->
         }
 
         if (p != project(":common")) {
-            common(project(":common")) { transitive false }
-            shadowCommon(project(":common")) { transitive false }
+            common(project(path: ":common", configuration: "namedElements")) { transitive false }
+            shadowCommon(project(path: ":common", configuration: "transformProduction${capitalProject(p.name)}")) { transitive false }
         }
     }
+}
+
+static def capitalProject(String value) {
+    if (value == "neoforge") return "NeoForge"
+    return value[0].toUpperCase() + value.substring(1)
 }
 
 allprojects {
