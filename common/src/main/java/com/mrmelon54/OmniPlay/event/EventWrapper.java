@@ -1,49 +1,46 @@
 package com.mrmelon54.OmniPlay.event;
 
-#if MC_VER == MC_1_16_5
-import me.shedaniel.architectury.event.Event;
-#else
-import dev.architectury.event.Event;
-#endif
+import dev.architectury.event.EventFactory;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Function;
 
-public class EventWrapper<N> implements Event<N> {
-    private final List<N> listeners = new ArrayList<>();
+public class EventWrapper<N, O> implements Event<N> {
+    private final Event<O> innerEvent;
+    private final Function<N, O> converter;
 
-    private EventWrapper() {
+    private EventWrapper(Event<O> innerEvent, Function<N, O> converter) {
+        this.innerEvent = innerEvent;
+        this.converter = converter;
     }
 
-    public static <N, O> EventWrapper<N> create(Event<O> innerEvent, Function<List<N>, O> converter) {
-        EventWrapper<N> wrapper = new EventWrapper<>();
-        innerEvent.register(converter.apply(wrapper.listeners));
-        return wrapper;
+    @SafeVarargs
+    public static <N, O> Event<N> of(Event<O> innerEvent, Function<N, O> converter, N... typeGetter) {
+        Event<N> outer = (Event<N>) EventFactory.createLoop(typeGetter);
+        return new EventWrapper<>(innerEvent, converter);
     }
 
     @Override
     public N invoker() {
-        throw new RuntimeException("invoker should not be called here");
+        return null;
     }
 
     @Override
     public void register(N listener) {
-        listeners.add(listener);
+        innerEvent.register(converter.apply(listener));
     }
 
     @Override
     public void unregister(N listener) {
-        listeners.remove(listener);
+
     }
 
     @Override
     public boolean isRegistered(N listener) {
-        return listeners.contains(listener);
+        return false;
     }
 
     @Override
     public void clearListeners() {
-        listeners.clear();
+
     }
 }
