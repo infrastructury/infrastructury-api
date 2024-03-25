@@ -1,9 +1,19 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.0'
+}
+
 architectury {
     common(rootProject.builds_for.split(","))
 }
 
 loom {
     accessWidenerPath = file("src/main/resources/omniplay.accesswidener")
+}
+
+configurations {
+    compile
+    mappings
 }
 
 dependencies {
@@ -18,6 +28,47 @@ dependencies {
     }
     modApi("com.terraformersmc:modmenu:${rootProject.modmenu_version}") {
         exclude(group: "net.fabricmc.fabric-api")
+    }
+}
+
+task printJarPath {
+    dependsOn(tasks.withType(JavaCompile))
+    doLast {
+        configurations.compile.each { File jar ->
+            println "Jar path: $jar"
+        }
+    }
+}
+
+tasks.register('applyMappings', JavaExec) {
+    System.out.println("apply mappings")
+//    project.configurations.getByName('compileClasspath').files.find {
+//        println it.path
+//    }
+    classpath configurations.runtimeClasspath
+    main 'your.mapping.tool.MainClass'
+    args 'arch.jar', 'arch-remapped.jar', "arch_${rootProject.minecraft_version}.txt"
+}
+
+tasks.named('build') {
+    dependsOn applyMappings
+
+    doLast {
+        configurations.getByName("compileClasspath").files.find {
+            println it.path
+        }
+
+        // Get the current classpath
+        def currentClasspath = sourceSets.main.compileClasspath
+
+        // Print the current classpath
+        println "Current Compile Classpath: $currentClasspath"
+
+        // Listen for changes in the classpath
+        sourceSets.main.compileClasspath.addChangeListener { newClasspath ->
+            // Print the new classpath when changes are detected
+            println "Classpath Change Detected! New Compile Classpath: $newClasspath"
+        }
     }
 }
 

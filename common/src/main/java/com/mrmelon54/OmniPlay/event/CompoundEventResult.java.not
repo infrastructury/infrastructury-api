@@ -1,5 +1,6 @@
 package com.mrmelon54.OmniPlay.event;
 
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.InteractionResultHolder;
 
 /**
@@ -75,6 +76,11 @@ public class CompoundEventResult<T> {
     private CompoundEventResult(EventResult result, T object) {
         this.result = result;
         this.object = object;
+    }
+
+    public static dev.architectury.event.CompoundEventResult<Screen> map(CompoundEventResult<Screen> result) {
+        if (result.equals(PASS)) return dev.architectury.event.CompoundEventResult.pass();
+        return dev.architectury.event.CompoundEventResult.interrupt(result.result.value(), result.object);
     }
 
     /**

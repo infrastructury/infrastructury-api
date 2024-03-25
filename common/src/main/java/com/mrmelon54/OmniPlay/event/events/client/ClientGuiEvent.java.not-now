@@ -31,11 +31,26 @@ public interface ClientGuiEvent {
     Event<DebugText> DEBUG_TEXT_RIGHT = EventWrapper.of((Event<GuiEvent.DebugText>) GuiEvent.DEBUG_TEXT_RIGHT, x -> x::gatherText);
     Event<ScreenInitPre> INIT_PRE = EventWrapper.of((Event<GuiEvent.ScreenInitPre>) GuiEvent.INIT_PRE, x -> x::init);
     Event<ScreenInitPost> INIT_POST = EventWrapper.of((Event<GuiEvent.ScreenInitPost>) GuiEvent.INIT_POST, x -> x::init);
-    Event<ScreenRenderPre> RENDER_PRE = EventWrapper.of((Event<GuiEvent.ScreenRenderPre>) GuiEvent.RENDER_PRE, x -> x::render);
+    Event<ScreenRenderPre> RENDER_PRE = EventWrapper.of((Event<GuiEvent.ScreenRenderPre>) GuiEvent.RENDER_PRE, x -> new GuiEvent.ScreenRenderPre() {
+
+        @Override
+        public dev.architectury.event.EventResult render(Screen screen, GuiGraphics graphics, int mouseX, int mouseY, float delta) {
+            return EventResult.map(x.render(screen, getGuiGraphics(graphics), mouseX, mouseY, delta));
+        }
+    });
     Event<ScreenRenderPost> RENDER_POST = EventWrapper.of((Event<GuiEvent.ScreenRenderPost>) GuiEvent.RENDER_POST, x -> x::render);
     Event<ContainerScreenRenderBackground> RENDER_CONTAINER_BACKGROUND = EventWrapper.of((Event<GuiEvent.ContainerScreenRenderBackground>) GuiEvent.RENDER_CONTAINER_BACKGROUND, x -> (screen, graphics, mouseX, mouseY, delta) -> x.render(screen, getGuiGraphics(graphics), mouseX, mouseY, delta));
     Event<ContainerScreenRenderForeground> RENDER_CONTAINER_FOREGROUND = EventWrapper.of((Event<GuiEvent.ContainerScreenRenderForeground>) GuiEvent.RENDER_CONTAINER_FOREGROUND, x -> (screen, graphics, mouseX, mouseY, delta) -> x.render(screen, getGuiGraphics(graphics), mouseX, mouseY, delta));
-    Event<SetScreen> SET_SCREEN = EventWrapper.of((Event<GuiEvent.SetScreen>) GuiEvent.SET_SCREEN, x -> x::modifyScreen);
+    Event<SetScreen> SET_SCREEN = EventWrapper.of((Event<GuiEvent.SetScreen>) GuiEvent.SET_SCREEN, x -> new GuiEvent.SetScreen() {
+        @Override
+        #if MC_VER < MC_1_20_1
+        public me.shedaniel.architectury.event.CompoundEventResult<Screen> modifyScreen(Screen screen) {
+        #else
+        public dev.architectury.event.CompoundEventResult<Screen> modifyScreen(Screen screen) {
+        #endif
+            return CompoundEventResult.map(x.modifyScreen(screen));
+        }
+    });
 
     #if MC_VER < MC_1_20_1
     static GuiGraphics getGuiGraphics(PoseStack matrices) {

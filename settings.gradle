@@ -51,6 +51,7 @@ loadProperties()
 
 
 // include projects
+include("mappings")
 include("common")
 
 var builds_for = ((String) gradle.builds_for).split(",")
