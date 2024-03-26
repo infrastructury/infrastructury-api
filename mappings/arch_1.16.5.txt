@@ -1,1 +1,0 @@
-CL: me.shedaniel.architectury.event.Event -> dev.architectury.event.Event

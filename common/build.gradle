@@ -1,6 +1,14 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "net.fabricmc:tiny-remapper:0.10.1"
+    }
+}
+
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '7.1.0'
 }
 
 architectury {
@@ -29,46 +37,49 @@ dependencies {
     modApi("com.terraformersmc:modmenu:${rootProject.modmenu_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
+
+    compileOnlyApi files(rootProject.projectDir.toPath().resolve(".gradle/remapped_architectury_cache/remapped_architectury_${rootProject.architectury_version}.jar"))
 }
 
-task printJarPath {
-    dependsOn(tasks.withType(JavaCompile))
-    doLast {
-        configurations.compile.each { File jar ->
-            println "Jar path: $jar"
+
+import net.fabricmc.tinyremapper.NonClassCopyMode
+import net.fabricmc.tinyremapper.OutputConsumerPath
+import net.fabricmc.tinyremapper.TinyRemapper
+import net.fabricmc.tinyremapper.TinyUtils
+
+tasks.register('applyMappings') {
+    doFirst {
+        var archJarPath = "/${rootProject.architectury_group.replaceAll("\\.", "/")}/architectury/${rootProject.architectury_version}/architectury-${rootProject.architectury_version}.jar"
+        println "Searching for architectury jar: $archJarPath"
+        File archJar = project.configurations.getByName('compileClasspath').files.find { it.path.endsWith(archJarPath) }
+        println "Found matching jar: $archJar"
+
+        var mappingsProjectDir = project(":mappings").projectDir.toPath()
+        var mappingsTiny = mappingsProjectDir.resolve("arch_${rootProject.architectury_version}.tiny")
+        println "Using mappings: $mappingsTiny"
+
+        def remapper = TinyRemapper.newRemapper()
+                .withMappings(TinyUtils.createTinyMappingProvider(mappingsTiny, "official", "named"))
+                .renameInvalidLocals(false)
+                .build()
+
+        var output = rootProject.projectDir.toPath().resolve(".gradle/remapped_architectury_cache/remapped_architectury_${rootProject.architectury_version}.jar")
+        new File(output.toUri()).delete()
+
+        try (OutputConsumerPath outputConsumer = new OutputConsumerPath.Builder(output).build()) {
+            outputConsumer.addNonClassFiles(archJar.toPath(), NonClassCopyMode.FIX_META_INF, remapper);
+
+            remapper.readInputs(archJar.toPath());
+            remapper.readClassPath(archJar.toPath());
+
+            remapper.apply(outputConsumer);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            remapper.finish();
         }
-    }
-}
 
-tasks.register('applyMappings', JavaExec) {
-    System.out.println("apply mappings")
-//    project.configurations.getByName('compileClasspath').files.find {
-//        println it.path
-//    }
-    classpath configurations.runtimeClasspath
-    main 'your.mapping.tool.MainClass'
-    args 'arch.jar', 'arch-remapped.jar', "arch_${rootProject.minecraft_version}.txt"
-}
-
-tasks.named('build') {
-    dependsOn applyMappings
-
-    doLast {
-        configurations.getByName("compileClasspath").files.find {
-            println it.path
-        }
-
-        // Get the current classpath
-        def currentClasspath = sourceSets.main.compileClasspath
-
-        // Print the current classpath
-        println "Current Compile Classpath: $currentClasspath"
-
-        // Listen for changes in the classpath
-        sourceSets.main.compileClasspath.addChangeListener { newClasspath ->
-            // Print the new classpath when changes are detected
-            println "Classpath Change Detected! New Compile Classpath: $newClasspath"
-        }
+        println "Remapping completed successfully."
     }
 }
 

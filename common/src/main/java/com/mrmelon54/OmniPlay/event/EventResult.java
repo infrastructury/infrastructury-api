@@ -17,9 +17,15 @@ public final class EventResult {
     private static final EventResult PASS = new EventResult(false, null);
     private static final EventResult FALSE = new EventResult(true, false);
 
-    public static dev.architectury.event.EventResult map(EventResult result) {
-        return result.interruptsFurtherEvaluation;
+    #if MC_VER == MC_1_16_5
+    public static InteractionResult map(EventResult result) {
+        return result.asMinecraft();
     }
+    #else
+    public static remapped.architectury.event.EventResult map(EventResult result) {
+        return remapped.architectury.event.EventResult.interrupt(result.interruptsFurtherEvaluation);
+    }
+    #endif
 
     /**
      * Passes the event to other listeners, and does not set an outcome of the event.

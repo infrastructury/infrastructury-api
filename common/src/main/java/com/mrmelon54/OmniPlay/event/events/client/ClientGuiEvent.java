@@ -1,17 +1,15 @@
 package com.mrmelon54.OmniPlay.event.events.client;
 
-#if MC_VER < MC_1_20_1
 import com.mojang.blaze3d.vertex.PoseStack;
-#endif
-
 import com.mrmelon54.OmniPlay.event.CompoundEventResult;
+import com.mrmelon54.OmniPlay.event.Event;
 import com.mrmelon54.OmniPlay.event.EventResult;
 import com.mrmelon54.OmniPlay.event.EventWrapper;
-import com.mrmelon54.OmniPlay.event.Event;
 import com.mrmelon54.OmniPlay.hooks.client.screen.ScreenAccess;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 
@@ -19,38 +17,26 @@ import java.util.List;
 
 @Environment(EnvType.CLIENT)
 public interface ClientGuiEvent {
-    #if MC_VER == MC_1_16_5
-    interface GuiEvent extends me.shedaniel.architectury.event.events.GuiEvent {
-    #else
-    interface GuiEvent extends dev.architectury.event.events.client.ClientGuiEvent {
-    #endif
+    interface GuiEvent extends remapped.architectury.event.events.client.ClientGuiEvent {
     }
 
     Event<RenderHud> RENDER_HUD = EventWrapper.of((Event<GuiEvent.RenderHud>) GuiEvent.RENDER_HUD, x -> (graphics, tickDelta) -> x.renderHud(getGuiGraphics(graphics), tickDelta));
     Event<DebugText> DEBUG_TEXT_LEFT = EventWrapper.of((Event<GuiEvent.DebugText>) GuiEvent.DEBUG_TEXT_LEFT, x -> x::gatherText);
     Event<DebugText> DEBUG_TEXT_RIGHT = EventWrapper.of((Event<GuiEvent.DebugText>) GuiEvent.DEBUG_TEXT_RIGHT, x -> x::gatherText);
-    Event<ScreenInitPre> INIT_PRE = EventWrapper.of((Event<GuiEvent.ScreenInitPre>) GuiEvent.INIT_PRE, x -> x::init);
-    Event<ScreenInitPost> INIT_POST = EventWrapper.of((Event<GuiEvent.ScreenInitPost>) GuiEvent.INIT_POST, x -> x::init);
-    Event<ScreenRenderPre> RENDER_PRE = EventWrapper.of((Event<GuiEvent.ScreenRenderPre>) GuiEvent.RENDER_PRE, x -> new GuiEvent.ScreenRenderPre() {
-
-        @Override
-        public dev.architectury.event.EventResult render(Screen screen, GuiGraphics graphics, int mouseX, int mouseY, float delta) {
-            return EventResult.map(x.render(screen, getGuiGraphics(graphics), mouseX, mouseY, delta));
-        }
-    });
-    Event<ScreenRenderPost> RENDER_POST = EventWrapper.of((Event<GuiEvent.ScreenRenderPost>) GuiEvent.RENDER_POST, x -> x::render);
+    #if MC_VER == MC_1_16_5
+    Event<ScreenInitPre> INIT_PRE = EventWrapper.of((Event<GuiEvent.ScreenInitPre>) GuiEvent.INIT_PRE, x -> (screen, a, b) -> EventResult.map(x.init(screen, () -> screen)));
+    Event<ScreenInitPost> INIT_POST = EventWrapper.of((Event<GuiEvent.ScreenInitPost>) GuiEvent.INIT_POST, x -> (screen, a, b) -> x.init(screen, () -> screen));
+    #else
+    Event<ScreenInitPre> INIT_PRE = EventWrapper.of((Event<GuiEvent.ScreenInitPre>) GuiEvent.INIT_PRE, x -> (screen, screenAccess) -> EventResult.map(x.init(screen,getScreen(screenAccess))));
+    Event<ScreenInitPost> INIT_POST = EventWrapper.of((Event<GuiEvent.ScreenInitPost>) GuiEvent.INIT_POST, x -> (screen, screenAccess) -> x.init(screen, screenAccess::getScreen));
+    #endif
+    Event<ScreenRenderPre> RENDER_PRE = EventWrapper.of((Event<GuiEvent.ScreenRenderPre>) GuiEvent.RENDER_PRE, x -> (screen, graphics, mouseX, mouseY, delta) -> EventResult.map(x.render(screen, getGuiGraphics(graphics), mouseX, mouseY, delta)));
+    Event<ScreenRenderPost> RENDER_POST = EventWrapper.of((Event<GuiEvent.ScreenRenderPost>) GuiEvent.RENDER_POST, x -> (screen, poseStack, i, i1, v) -> x.render(screen, getGuiGraphics(poseStack), i, i1, v));
+    #if MC_VER > MC_1_17_1
     Event<ContainerScreenRenderBackground> RENDER_CONTAINER_BACKGROUND = EventWrapper.of((Event<GuiEvent.ContainerScreenRenderBackground>) GuiEvent.RENDER_CONTAINER_BACKGROUND, x -> (screen, graphics, mouseX, mouseY, delta) -> x.render(screen, getGuiGraphics(graphics), mouseX, mouseY, delta));
     Event<ContainerScreenRenderForeground> RENDER_CONTAINER_FOREGROUND = EventWrapper.of((Event<GuiEvent.ContainerScreenRenderForeground>) GuiEvent.RENDER_CONTAINER_FOREGROUND, x -> (screen, graphics, mouseX, mouseY, delta) -> x.render(screen, getGuiGraphics(graphics), mouseX, mouseY, delta));
-    Event<SetScreen> SET_SCREEN = EventWrapper.of((Event<GuiEvent.SetScreen>) GuiEvent.SET_SCREEN, x -> new GuiEvent.SetScreen() {
-        @Override
-        #if MC_VER < MC_1_20_1
-        public me.shedaniel.architectury.event.CompoundEventResult<Screen> modifyScreen(Screen screen) {
-        #else
-        public dev.architectury.event.CompoundEventResult<Screen> modifyScreen(Screen screen) {
-        #endif
-            return CompoundEventResult.map(x.modifyScreen(screen));
-        }
-    });
+    #endif
+    Event<SetScreen> SET_SCREEN = EventWrapper.of((Event<GuiEvent.SetScreen>) GuiEvent.SET_SCREEN, x -> screen -> CompoundEventResult.map(x.modifyScreen(screen)));
 
     #if MC_VER < MC_1_20_1
     static GuiGraphics getGuiGraphics(PoseStack matrices) {

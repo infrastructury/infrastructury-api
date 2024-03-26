@@ -17,6 +17,21 @@ public class CompoundEventResult<T> {
     private final EventResult result;
     private final T object;
 
+    private static remapped.architectury.event.CompoundEventResult<Screen> mapInternal(CompoundEventResult<Screen> result) {
+        if (result.equals(PASS)) return remapped.architectury.event.CompoundEventResult.pass();
+        return remapped.architectury.event.CompoundEventResult.interrupt(result.result.value(), result.object);
+    }
+
+    #if MC_VER == MC_1_16_5
+    public static InteractionResultHolder<Screen> map(CompoundEventResult<Screen> result) {
+        return mapInternal(result).asMinecraft();
+    }
+    #else
+    public static remapped.architectury.event.CompoundEventResult<Screen> map(CompoundEventResult<Screen> result) {
+        return mapInternal(result);
+    }
+    #endif
+
     /**
      * Passes the event to other listeners, and does not set an outcome of the event.
      *
@@ -76,11 +91,6 @@ public class CompoundEventResult<T> {
     private CompoundEventResult(EventResult result, T object) {
         this.result = result;
         this.object = object;
-    }
-
-    public static dev.architectury.event.CompoundEventResult<Screen> map(CompoundEventResult<Screen> result) {
-        if (result.equals(PASS)) return dev.architectury.event.CompoundEventResult.pass();
-        return dev.architectury.event.CompoundEventResult.interrupt(result.result.value(), result.object);
     }
 
     /**
