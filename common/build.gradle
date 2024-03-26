@@ -24,12 +24,20 @@ configurations {
     mappings
 }
 
+
+
+import net.fabricmc.tinyremapper.NonClassCopyMode
+import net.fabricmc.tinyremapper.OutputConsumerPath
+import net.fabricmc.tinyremapper.TinyRemapper
+import net.fabricmc.tinyremapper.TinyUtils
+
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 import java.security.MessageDigest
-import java.io.File
 
 var mappingsProjectDir = project(":mappings").projectDir.toPath()
-var mappingsTiny = mappingsProjectDir.resolve("arch_${rootProject.architectury_version}.tiny")
-var hashHex = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest((new File(mappingsTiny.toUri())).readBytes()))
+var mappingsTiny = new File(mappingsProjectDir.resolve("arch_${rootProject.architectury_version}.tiny").toUri())
+var hashHex = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest(mappingsTiny.readBytes()))
 var remappedArchPath = rootProject.projectDir.toPath().resolve(".gradle/remapped_architectury_cache/remapped_architectury_${rootProject.architectury_version}_${hashHex}.jar")
 
 dependencies {
@@ -49,11 +57,25 @@ dependencies {
     compileOnlyApi files(remappedArchPath)
 }
 
+static void runMappingsOnJar(File input, File output, File mappingsTiny, String fromM, String toM) {
+    def remapper = TinyRemapper.newRemapper()
+            .withMappings(TinyUtils.createTinyMappingProvider(mappingsTiny.toPath(), fromM, toM))
+            .renameInvalidLocals(false)
+            .build()
 
-import net.fabricmc.tinyremapper.NonClassCopyMode
-import net.fabricmc.tinyremapper.OutputConsumerPath
-import net.fabricmc.tinyremapper.TinyRemapper
-import net.fabricmc.tinyremapper.TinyUtils
+    output.delete()
+
+    try (OutputConsumerPath outputConsumer = new OutputConsumerPath.Builder(output.toPath()).build()) {
+        outputConsumer.addNonClassFiles(input.toPath(), NonClassCopyMode.FIX_META_INF, remapper)
+        remapper.readInputs(input.toPath())
+        remapper.readClassPath(input.toPath())
+        remapper.apply(outputConsumer)
+    } catch (IOException e) {
+        throw new RuntimeException(e)
+    } finally {
+        remapper.finish()
+    }
+}
 
 gradle.projectsEvaluated {
     tasks.register('applyMappings') {
@@ -65,33 +87,28 @@ gradle.projectsEvaluated {
         var archJarPath = "/${rootProject.architectury_group.replaceAll("\\.", "/")}/architectury/${rootProject.architectury_version}/architectury-${rootProject.architectury_version}.jar"
         println "Searching for architectury jar: $archJarPath"
         File archJar = project.configurations.getByName('compileClasspath').files.find { it.path.endsWith(archJarPath) }
-        println "Found matching jar: $archJar"
-        println "Using mappings: $mappingsTiny"
+        println "Found matching jar: ${archJar.name}"
+        println "Using mappings: ${mappingsTiny.name}"
 
-        def remapper = TinyRemapper.newRemapper()
-                .withMappings(TinyUtils.createTinyMappingProvider(mappingsTiny, "official", "named"))
-                .renameInvalidLocals(false)
-                .build()
-
-        new File(remappedArchPath.toUri()).delete()
-
-        try (OutputConsumerPath outputConsumer = new OutputConsumerPath.Builder(remappedArchPath).build()) {
-            outputConsumer.addNonClassFiles(archJar.toPath(), NonClassCopyMode.FIX_META_INF, remapper)
-
-            remapper.readInputs(archJar.toPath());
-            remapper.readClassPath(archJar.toPath());
-
-            remapper.apply(outputConsumer);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            remapper.finish();
-        }
+        runMappingsOnJar(archJar, new File(remappedArchPath.toUri()), new File(mappingsTiny), "official", "named")
 
         println "Remapping completed successfully."
     }
 
     compileJava.dependsOn applyMappings
+
+    tasks.register('undoApplyMappings') {
+        doLast {
+            File mergedJar = new File(rootProject.layout.projectDirectory.asFile, "Merged/${rootProject.forgix_merged_jar}")
+            File remapFile = new File(mergedJar.parentFile, mergedJar.name + ".remapped.jar")
+            runMappingsOnJar(mergedJar, remapFile, mappingsTiny, "named", "official")
+            mergedJar.delete()
+            Files.copy(remapFile.toPath(), mergedJar.toPath(), StandardCopyOption.REPLACE_EXISTING)
+            remapFile.delete()
+        }
+    }
+
+    rootProject.tasks['mergeJars'].finalizedBy undoApplyMappings
 }
 
 publishing {

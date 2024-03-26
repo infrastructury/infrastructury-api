@@ -40,6 +40,7 @@ writeBuildGradlePredefine(rootProject.mcVers, rootProject.mcIndex)
 
 rootProject.versionStr = "${rootProject.mod_version}-mc${rootProject.minecraft_version}"
 rootProject.compatible_forge_versions = generateForgeVersions(rootProject.compatible_minecraft_versions)
+rootProject.forgix_merged_jar = "${project.archives_base_name}-${rootProject.versionStr}-${getVersionMetadata()}.jar"
 
 compileJava {
     sourceCompatibility = rootProject.java_version
@@ -169,7 +170,7 @@ allprojects {
 
 forgix {
     group = "com.mrmelon54.OmniPlay"
-    mergedJarName = "${project.archives_base_name}-${rootProject.versionStr}-${getVersionMetadata()}.jar"
+    mergedJarName = rootProject.forgix_merged_jar
 
     if (findProject(":fabric"))
         fabric {
