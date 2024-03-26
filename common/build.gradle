@@ -90,7 +90,7 @@ gradle.projectsEvaluated {
         println "Found matching jar: ${archJar.name}"
         println "Using mappings: ${mappingsTiny.name}"
 
-        runMappingsOnJar(archJar, new File(remappedArchPath.toUri()), new File(mappingsTiny), "official", "named")
+        runMappingsOnJar(archJar, new File(remappedArchPath.toUri()), mappingsTiny, "official", "named")
 
         println "Remapping completed successfully."
     }
