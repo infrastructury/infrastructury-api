@@ -27,7 +27,7 @@ public interface ClientGuiEvent {
     Event<ScreenInitPre> INIT_PRE = EventWrapper.of((Event<GuiEvent.ScreenInitPre>) GuiEvent.INIT_PRE, x -> (screen, a, b) -> EventResult.map(x.init(screen, () -> screen)));
     Event<ScreenInitPost> INIT_POST = EventWrapper.of((Event<GuiEvent.ScreenInitPost>) GuiEvent.INIT_POST, x -> (screen, a, b) -> x.init(screen, () -> screen));
     #else
-    Event<ScreenInitPre> INIT_PRE = EventWrapper.of((Event<GuiEvent.ScreenInitPre>) GuiEvent.INIT_PRE, x -> (screen, screenAccess) -> EventResult.map(x.init(screen,getScreen(screenAccess))));
+    Event<ScreenInitPre> INIT_PRE = EventWrapper.of((Event<GuiEvent.ScreenInitPre>) GuiEvent.INIT_PRE, x -> (screen, screenAccess) -> EventResult.map(x.init(screen, screenAccess::getScreen)));
     Event<ScreenInitPost> INIT_POST = EventWrapper.of((Event<GuiEvent.ScreenInitPost>) GuiEvent.INIT_POST, x -> (screen, screenAccess) -> x.init(screen, screenAccess::getScreen));
     #endif
     Event<ScreenRenderPre> RENDER_PRE = EventWrapper.of((Event<GuiEvent.ScreenRenderPre>) GuiEvent.RENDER_PRE, x -> (screen, graphics, mouseX, mouseY, delta) -> EventResult.map(x.render(screen, getGuiGraphics(graphics), mouseX, mouseY, delta)));
