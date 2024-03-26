@@ -24,6 +24,14 @@ configurations {
     mappings
 }
 
+import java.security.MessageDigest
+import java.io.File
+
+var mappingsProjectDir = project(":mappings").projectDir.toPath()
+var mappingsTiny = mappingsProjectDir.resolve("arch_${rootProject.architectury_version}.tiny")
+var hashHex = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest((new File(mappingsTiny.toUri())).readBytes()))
+var remappedArchPath = rootProject.projectDir.toPath().resolve(".gradle/remapped_architectury_cache/remapped_architectury_${rootProject.architectury_version}_${hashHex}.jar")
+
 dependencies {
     // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
     // Do NOT use other classes from fabric loader
@@ -38,7 +46,7 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
-    compileOnlyApi files(rootProject.projectDir.toPath().resolve(".gradle/remapped_architectury_cache/remapped_architectury_${rootProject.architectury_version}.jar"))
+    compileOnlyApi files(remappedArchPath)
 }
 
 
@@ -49,13 +57,15 @@ import net.fabricmc.tinyremapper.TinyUtils
 
 gradle.projectsEvaluated {
     tasks.register('applyMappings') {
+        if (new File(remappedArchPath.toUri()).exists()) {
+            println "Remapped Architectury is already up-to-date"
+            return
+        }
+
         var archJarPath = "/${rootProject.architectury_group.replaceAll("\\.", "/")}/architectury/${rootProject.architectury_version}/architectury-${rootProject.architectury_version}.jar"
         println "Searching for architectury jar: $archJarPath"
         File archJar = project.configurations.getByName('compileClasspath').files.find { it.path.endsWith(archJarPath) }
         println "Found matching jar: $archJar"
-
-        var mappingsProjectDir = project(":mappings").projectDir.toPath()
-        var mappingsTiny = mappingsProjectDir.resolve("arch_${rootProject.architectury_version}.tiny")
         println "Using mappings: $mappingsTiny"
 
         def remapper = TinyRemapper.newRemapper()
@@ -63,11 +73,10 @@ gradle.projectsEvaluated {
                 .renameInvalidLocals(false)
                 .build()
 
-        var output = rootProject.projectDir.toPath().resolve(".gradle/remapped_architectury_cache/remapped_architectury_${rootProject.architectury_version}.jar")
-        new File(output.toUri()).delete()
+        new File(remappedArchPath.toUri()).delete()
 
-        try (OutputConsumerPath outputConsumer = new OutputConsumerPath.Builder(output).build()) {
-            outputConsumer.addNonClassFiles(archJar.toPath(), NonClassCopyMode.FIX_META_INF, remapper);
+        try (OutputConsumerPath outputConsumer = new OutputConsumerPath.Builder(remappedArchPath).build()) {
+            outputConsumer.addNonClassFiles(archJar.toPath(), NonClassCopyMode.FIX_META_INF, remapper)
 
             remapper.readInputs(archJar.toPath());
             remapper.readClassPath(archJar.toPath());
@@ -81,6 +90,8 @@ gradle.projectsEvaluated {
 
         println "Remapping completed successfully."
     }
+
+    compileJava.dependsOn applyMappings
 }
 
 publishing {
