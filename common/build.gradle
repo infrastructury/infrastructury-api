@@ -47,8 +47,8 @@ import net.fabricmc.tinyremapper.OutputConsumerPath
 import net.fabricmc.tinyremapper.TinyRemapper
 import net.fabricmc.tinyremapper.TinyUtils
 
-tasks.register('applyMappings') {
-    doFirst {
+gradle.projectsEvaluated {
+    tasks.register('applyMappings') {
         var archJarPath = "/${rootProject.architectury_group.replaceAll("\\.", "/")}/architectury/${rootProject.architectury_version}/architectury-${rootProject.architectury_version}.jar"
         println "Searching for architectury jar: $archJarPath"
         File archJar = project.configurations.getByName('compileClasspath').files.find { it.path.endsWith(archJarPath) }
