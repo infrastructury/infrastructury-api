@@ -1,5 +1,7 @@
 package com.mrmelon54.OmniPlay.event;
 
+import remapped.architectury.event.Event;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;

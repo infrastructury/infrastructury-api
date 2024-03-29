@@ -3,14 +3,6 @@ package com.mrmelon54.OmniPlay.event;
 import net.minecraft.world.InteractionResult;
 import org.apache.commons.lang3.BooleanUtils;
 
-/**
- * A result from an event, determines if the event should continue to other listeners,
- * and determines the outcome of the event.
- *
- * @see #pass()
- * @see #interrupt(Boolean)
- * @see CompoundEventResult
- */
 public final class EventResult {
     private static final EventResult TRUE = new EventResult(true, true);
     private static final EventResult STOP = new EventResult(true, null);
