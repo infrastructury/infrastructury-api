@@ -22,8 +22,8 @@ loom {
 configurations {
     compile
     mappings
+    addArchApi
 }
-
 
 
 import net.fabricmc.tinyremapper.NonClassCopyMode
@@ -44,6 +44,7 @@ dependencies {
     // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
     // Do NOT use other classes from fabric loader
     modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    addArchApi "${rootProject.architectury_group}:architectury:${rootProject.architectury_version}"
 
     modApi("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}") {
         exclude(group: "net.fabricmc.fabric-api")
@@ -51,8 +52,6 @@ dependencies {
     modApi("com.terraformersmc:modmenu:${rootProject.modmenu_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
-
-    compileOnlyApi files(remappedArchPath)
 }
 
 static void runMappingsOnJar(File input, File output, File mappingsTiny, String fromM, String toM) {
@@ -75,39 +74,43 @@ static void runMappingsOnJar(File input, File output, File mappingsTiny, String 
     }
 }
 
-gradle.projectsEvaluated {
-    tasks.register('applyMappings') {
-        if (new File(remappedArchPath.toUri()).exists()) {
-            println "Remapped Architectury is already up-to-date"
-            return
-        }
 
-        var archJarPath = "/${rootProject.architectury_group.replaceAll("\\.", "/")}/architectury/${rootProject.architectury_version}/architectury-${rootProject.architectury_version}.jar"
+tasks.register('applyMappings') {
+    File remappedArchFile = new File(remappedArchPath.toUri())
+    if (!remappedArchFile.exists()) {
+        var archJarPath = "/architectury-${rootProject.architectury_version}.jar"
         println "Searching for architectury jar: $archJarPath"
-        File archJar = project.configurations.getByName('compileClasspath').files.find { it.path.endsWith(archJarPath) }
+
+        File archJar = configurations.addArchApi.files.find { it.path.endsWith(archJarPath) }
         println "Found matching jar: ${archJar.name}"
         println "Using mappings: ${mappingsTiny.name}"
 
-        runMappingsOnJar(archJar, new File(remappedArchPath.toUri()), mappingsTiny, "official", "named")
+        runMappingsOnJar(archJar, remappedArchFile, mappingsTiny, "official", "named")
 
         println "Remapping completed successfully."
     }
-
-    compileJava.dependsOn applyMappings
-
-    tasks.register('undoApplyMappings') {
-        doLast {
-            File mergedJar = new File(rootProject.layout.projectDirectory.asFile, "Merged/${rootProject.forgix_merged_jar}")
-            File remapFile = new File(mergedJar.parentFile, mergedJar.name + ".remapped.jar")
-            runMappingsOnJar(mergedJar, remapFile, mappingsTiny, "named", "official")
-            mergedJar.delete()
-            Files.copy(remapFile.toPath(), mergedJar.toPath(), StandardCopyOption.REPLACE_EXISTING)
-            remapFile.delete()
-        }
+    println "Adding remapped Architectury dependency"
+    dependencies {
+        modApi files(remappedArchPath)
     }
-
-    rootProject.tasks['mergeJars'].finalizedBy undoApplyMappings
+    return
 }
+
+compileJava.dependsOn applyMappings
+
+tasks.register('undoApplyMappings') {
+    doLast {
+        File mergedJar = new File(rootProject.layout.projectDirectory.asFile, "Merged/${rootProject.forgix_merged_jar}")
+        File remapFile = new File(mergedJar.parentFile, mergedJar.name + ".remapped.jar")
+        runMappingsOnJar(mergedJar, remapFile, mappingsTiny, "named", "official")
+        mergedJar.delete()
+        Files.copy(remapFile.toPath(), mergedJar.toPath(), StandardCopyOption.REPLACE_EXISTING)
+        remapFile.delete()
+    }
+}
+
+rootProject.tasks['mergeJars'].finalizedBy undoApplyMappings
+
 
 publishing {
     publications {
