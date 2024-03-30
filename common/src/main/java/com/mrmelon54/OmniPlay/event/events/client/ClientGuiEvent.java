@@ -19,16 +19,27 @@ public interface ClientGuiEvent {
     interface Inner extends remapped.architectury.event.events.client.ClientGuiEvent {
     }
 
+    private static remapped.architectury.event.events.client.ClientGuiEvent.ScreenInitPre mapScreenInitPre(ScreenInitPre x) {
+        #if MC_VER == MC_1_16_5
+        return (screen, a, b) -> EventResult.map(x.init(screen, () -> screen));
+        #else
+        return (screen, screenAccess) -> EventResult.map(x.init(screen, screenAccess::getScreen));
+        #endif
+    }
+
+    private static remapped.architectury.event.events.client.ClientGuiEvent.ScreenInitPost mapScreenInitPost(ScreenInitPost x) {
+        #if MC_VER == MC_1_16_5
+        return (screen, a, b) -> x.init(screen, () -> screen);
+        #else
+        return (screen, screenAccess) -> x.init(screen, screenAccess::getScreen);
+        #endif
+    }
+
     Event<RenderHud> RENDER_HUD = EventWrapper.of(Inner.RENDER_HUD, x -> (graphics, tickDelta) -> x.renderHud(Graphics.get(graphics), tickDelta));
     Event<DebugText> DEBUG_TEXT_LEFT = EventWrapper.of(Inner.DEBUG_TEXT_LEFT, x -> x::gatherText);
     Event<DebugText> DEBUG_TEXT_RIGHT = EventWrapper.of(Inner.DEBUG_TEXT_RIGHT, x -> x::gatherText);
-    #if MC_VER == MC_1_16_5
-    Event<ScreenInitPre> INIT_PRE = EventWrapper.of(Inner.INIT_PRE, x -> (screen, a, b) -> EventResult.map(x.init(screen, () -> screen)));
-    Event<ScreenInitPost> INIT_POST = EventWrapper.of(Inner.INIT_POST, x -> (screen, a, b) -> x.init(screen, () -> screen));
-    #else
-    Event<ScreenInitPre> INIT_PRE = EventWrapper.of(Inner.INIT_PRE, x -> (screen, screenAccess) -> EventResult.map(x.init(screen, screenAccess::getScreen)));
-    Event<ScreenInitPost> INIT_POST = EventWrapper.of(Inner.INIT_POST, x -> (screen, screenAccess) -> x.init(screen, screenAccess::getScreen));
-    #endif
+    Event<ScreenInitPre> INIT_PRE = EventWrapper.of(Inner.INIT_PRE, ClientGuiEvent::mapScreenInitPre);
+    Event<ScreenInitPost> INIT_POST = EventWrapper.of(Inner.INIT_POST, ClientGuiEvent::mapScreenInitPost);
     Event<ScreenRenderPre> RENDER_PRE = EventWrapper.of(Inner.RENDER_PRE, x -> (screen, graphics, mouseX, mouseY, delta) -> EventResult.map(x.render(screen, Graphics.get(graphics), mouseX, mouseY, delta)));
     Event<ScreenRenderPost> RENDER_POST = EventWrapper.of(Inner.RENDER_POST, x -> (screen, poseStack, i, i1, v) -> x.render(screen, Graphics.get(poseStack), i, i1, v));
     #if MC_VER > MC_1_17_1
