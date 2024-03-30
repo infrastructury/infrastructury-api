@@ -101,6 +101,7 @@ compileJava.dependsOn applyMappings
 tasks.register('undoApplyMappings') {
     doLast {
         File mergedJar = new File(rootProject.layout.projectDirectory.asFile, "Merged/${rootProject.forgix_merged_jar}")
+        if (!mergedJar.exists()) throw new GradleException("Missing merged output jar")
         File remapFile = new File(mergedJar.parentFile, mergedJar.name + ".remapped.jar")
         runMappingsOnJar(mergedJar, remapFile, mappingsTiny, "named", "official")
         mergedJar.delete()
