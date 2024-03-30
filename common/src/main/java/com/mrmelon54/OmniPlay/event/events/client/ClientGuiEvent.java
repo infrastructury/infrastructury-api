@@ -4,16 +4,13 @@ import com.mrmelon54.OmniPlay.event.CompoundEventResult;
 import com.mrmelon54.OmniPlay.event.EventResult;
 import com.mrmelon54.OmniPlay.event.EventWrapper;
 import com.mrmelon54.OmniPlay.hooks.client.screen.ScreenAccess;
+import com.mrmelon54.OmniPlay.util.Graphics;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import remapped.architectury.event.Event;
-
-#if MC_VER < MC_1_20_1
-import com.mojang.blaze3d.vertex.PoseStack;
-#endif
 
 import java.util.List;
 
@@ -22,7 +19,7 @@ public interface ClientGuiEvent {
     interface Inner extends remapped.architectury.event.events.client.ClientGuiEvent {
     }
 
-    Event<RenderHud> RENDER_HUD = EventWrapper.of(Inner.RENDER_HUD, x -> (graphics, tickDelta) -> x.renderHud(getGuiGraphics(graphics), tickDelta));
+    Event<RenderHud> RENDER_HUD = EventWrapper.of(Inner.RENDER_HUD, x -> (graphics, tickDelta) -> x.renderHud(Graphics.get(graphics), tickDelta));
     Event<DebugText> DEBUG_TEXT_LEFT = EventWrapper.of(Inner.DEBUG_TEXT_LEFT, x -> x::gatherText);
     Event<DebugText> DEBUG_TEXT_RIGHT = EventWrapper.of(Inner.DEBUG_TEXT_RIGHT, x -> x::gatherText);
     #if MC_VER == MC_1_16_5
@@ -32,23 +29,13 @@ public interface ClientGuiEvent {
     Event<ScreenInitPre> INIT_PRE = EventWrapper.of(Inner.INIT_PRE, x -> (screen, screenAccess) -> EventResult.map(x.init(screen, screenAccess::getScreen)));
     Event<ScreenInitPost> INIT_POST = EventWrapper.of(Inner.INIT_POST, x -> (screen, screenAccess) -> x.init(screen, screenAccess::getScreen));
     #endif
-    Event<ScreenRenderPre> RENDER_PRE = EventWrapper.of(Inner.RENDER_PRE, x -> (screen, graphics, mouseX, mouseY, delta) -> EventResult.map(x.render(screen, getGuiGraphics(graphics), mouseX, mouseY, delta)));
-    Event<ScreenRenderPost> RENDER_POST = EventWrapper.of(Inner.RENDER_POST, x -> (screen, poseStack, i, i1, v) -> x.render(screen, getGuiGraphics(poseStack), i, i1, v));
+    Event<ScreenRenderPre> RENDER_PRE = EventWrapper.of(Inner.RENDER_PRE, x -> (screen, graphics, mouseX, mouseY, delta) -> EventResult.map(x.render(screen, Graphics.get(graphics), mouseX, mouseY, delta)));
+    Event<ScreenRenderPost> RENDER_POST = EventWrapper.of(Inner.RENDER_POST, x -> (screen, poseStack, i, i1, v) -> x.render(screen, Graphics.get(poseStack), i, i1, v));
     #if MC_VER > MC_1_17_1
-    Event<ContainerScreenRenderBackground> RENDER_CONTAINER_BACKGROUND = EventWrapper.of(Inner.RENDER_CONTAINER_BACKGROUND, x -> (screen, graphics, mouseX, mouseY, delta) -> x.render(screen, getGuiGraphics(graphics), mouseX, mouseY, delta));
-    Event<ContainerScreenRenderForeground> RENDER_CONTAINER_FOREGROUND = EventWrapper.of(Inner.RENDER_CONTAINER_FOREGROUND, x -> (screen, graphics, mouseX, mouseY, delta) -> x.render(screen, getGuiGraphics(graphics), mouseX, mouseY, delta));
+    Event<ContainerScreenRenderBackground> RENDER_CONTAINER_BACKGROUND = EventWrapper.of(Inner.RENDER_CONTAINER_BACKGROUND, x -> (screen, graphics, mouseX, mouseY, delta) -> x.render(screen, Graphics.get(graphics), mouseX, mouseY, delta));
+    Event<ContainerScreenRenderForeground> RENDER_CONTAINER_FOREGROUND = EventWrapper.of(Inner.RENDER_CONTAINER_FOREGROUND, x -> (screen, graphics, mouseX, mouseY, delta) -> x.render(screen, Graphics.get(graphics), mouseX, mouseY, delta));
     #endif
     Event<SetScreen> SET_SCREEN = EventWrapper.of(Inner.SET_SCREEN, x -> screen -> CompoundEventResult.map(x.modifyScreen(screen)));
-
-    #if MC_VER < MC_1_20_1
-    static GuiGraphics getGuiGraphics(PoseStack matrices) {
-        return new GuiGraphics(matrices);
-    }
-    #else
-    static GuiGraphics getGuiGraphics(GuiGraphics guiGraphics) {
-        return guiGraphics;
-    }
-    #endif
 
     @Environment(EnvType.CLIENT)
     interface RenderHud {
