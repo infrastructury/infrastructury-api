@@ -6,6 +6,7 @@ import com.mrmelon54.OmniPlay.event.EventWrapper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.ChatType;
+import net.minecraft.network.chat.ChatType$Bound;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 import remapped.architectury.event.Event;
@@ -15,9 +16,25 @@ public interface ClientChatEvent {
     interface ChatEvent extends remapped.architectury.event.events.client.ClientChatEvent {
     }
 
-    Event<Send> SEND = EventWrapper.of(ChatEvent.SEND, send -> (s, component) -> EventResult.map(send.send(s, component)));
+    Event<Send> SEND = resolveSendEvent();
 
-    Event<Received> RECEIVED = EventWrapper.of(ChatEvent.RECEIVED, received -> (bound, component) -> CompoundEventResult.map(received.process(bound, component)));
+    static Event<Send> resolveSendEvent() {
+        #if MC_VER < MC_1_19_2
+        return EventWrapper.of(ChatEvent.PROCESS, send -> s -> CompoundEventResult.map(CompoundEventResult.fromEventResult(send.send(s, null))));
+        #else
+        return EventWrapper.of(ChatEvent.SEND, send -> (s, component) -> EventResult.map(send.send(s, component)));
+        #endif
+    }
+
+    Event<Received> RECEIVED = resolveReceivedEvent();
+
+    static Event<Received> resolveReceivedEvent() {
+        #if MC_VER < MC_1_19_2
+        return EventWrapper.of(ChatEvent.RECEIVED, received -> (bound, component, uuid) -> CompoundEventResult.map(received.process(new ChatType$Bound(bound), component)));
+        #else
+        return EventWrapper.of(ChatEvent.RECEIVED, received -> (bound, component) -> CompoundEventResult.map(received.process(new ChatType$Bound(bound), component)));
+        #endif
+    }
 
     @Environment(EnvType.CLIENT)
     interface Send {
@@ -26,6 +43,6 @@ public interface ClientChatEvent {
 
     @Environment(EnvType.CLIENT)
     interface Received {
-        CompoundEventResult<Component> process(ChatType.Bound type, Component message);
+        CompoundEventResult<Component> process(ChatType$Bound type, Component message);
     }
 }

@@ -22,6 +22,10 @@ public class CompoundEventResult<T> {
     }
     #endif
 
+    public static <T> com.mrmelon54.OmniPlay.event.CompoundEventResult<T> fromEventResult(EventResult result) {
+        return CompoundEventResult.interrupt(result.value(), null);
+    }
+
     public static <T> CompoundEventResult<T> pass() {
         return (CompoundEventResult<T>) PASS;
     }

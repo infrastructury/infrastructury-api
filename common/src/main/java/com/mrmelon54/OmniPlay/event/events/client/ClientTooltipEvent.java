@@ -78,7 +78,7 @@ public interface ClientTooltipEvent {
     })));
 
     static AdditionalContexts additionalContexts() {
-        var additionalContexts = TooltipAdditionalContextsImpl.get();
+        remapped.architectury.event.events.client.ClientTooltipEvent.AdditionalContexts additionalContexts = TooltipAdditionalContextsImpl.get();
         return new AdditionalContexts() {
             @Override
             public @Nullable ItemStack getItem() {

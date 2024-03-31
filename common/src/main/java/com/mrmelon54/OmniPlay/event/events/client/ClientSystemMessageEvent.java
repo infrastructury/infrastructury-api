@@ -1,5 +1,6 @@
 package com.mrmelon54.OmniPlay.event.events.client;
 
+#if MC_VER > MC_1_19_2
 import com.mrmelon54.OmniPlay.event.CompoundEventResult;
 import com.mrmelon54.OmniPlay.event.EventWrapper;
 import net.fabricmc.api.EnvType;
@@ -19,3 +20,4 @@ public interface ClientSystemMessageEvent {
         CompoundEventResult<Component> process(Component message);
     }
 }
+#endif

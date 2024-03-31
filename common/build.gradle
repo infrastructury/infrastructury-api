@@ -38,7 +38,7 @@ import java.security.MessageDigest
 var mappingsProjectDir = project(":mappings").projectDir.toPath()
 var mappingsTiny = new File(mappingsProjectDir.resolve("arch_${rootProject.architectury_version}.tiny").toUri())
 var hashHex = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest(mappingsTiny.readBytes()))
-var remappedArchPath = rootProject.projectDir.toPath().resolve(".gradle/remapped_architectury_cache/remapped_architectury_${rootProject.architectury_version}_${hashHex}.jar")
+var remappedArchPath = rootProject.projectDir.toPath().resolve(".gradle/remapped_architectury_cache/${hashHex}/remapped_architectury_${rootProject.architectury_version}.jar")
 
 dependencies {
     // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies

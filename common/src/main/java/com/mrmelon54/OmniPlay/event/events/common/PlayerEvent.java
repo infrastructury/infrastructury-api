@@ -20,13 +20,21 @@ import org.jetbrains.annotations.Nullable;
 import remapped.architectury.event.Event;
 
 public interface PlayerEvent {
+    private static remapped.architectury.event.events.common.PlayerEvent.PlayerAdvancement mapPlayerAdvancement(PlayerAdvancement playerAdvancement) {
+        #if MC_VER < MC_1_20_2
+        return ((serverPlayer, advancement) -> playerAdvancement.award(serverPlayer, new AdvancementHolder(advancement.getId(), advancement)));
+        #else
+        return playerAdvancement::award;
+        #endif
+    }
+
     interface Inner extends remapped.architectury.event.events.common.PlayerEvent {
     }
 
     Event<PlayerJoin> PLAYER_JOIN = EventWrapper.of(Inner.PLAYER_JOIN, playerJoin -> playerJoin::join);
     Event<PlayerQuit> PLAYER_QUIT = EventWrapper.of(Inner.PLAYER_QUIT, playerQuit -> playerQuit::quit);
     Event<PlayerRespawn> PLAYER_RESPAWN = EventWrapper.of(Inner.PLAYER_RESPAWN, playerRespawn -> playerRespawn::respawn);
-    Event<PlayerAdvancement> PLAYER_ADVANCEMENT = EventWrapper.of(Inner.PLAYER_ADVANCEMENT, playerAdvancement -> playerAdvancement::award);
+    Event<PlayerAdvancement> PLAYER_ADVANCEMENT = EventWrapper.of(Inner.PLAYER_ADVANCEMENT, PlayerEvent::mapPlayerAdvancement);
     Event<PlayerClone> PLAYER_CLONE = EventWrapper.of(Inner.PLAYER_CLONE, playerClone -> playerClone::clone);
     Event<CraftItem> CRAFT_ITEM = EventWrapper.of(Inner.CRAFT_ITEM, craftItem -> craftItem::craft);
     Event<SmeltItem> SMELT_ITEM = EventWrapper.of(Inner.SMELT_ITEM, smeltItem -> smeltItem::smelt);

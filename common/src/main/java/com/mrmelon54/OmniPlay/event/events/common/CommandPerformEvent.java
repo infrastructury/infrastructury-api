@@ -6,6 +6,9 @@ import net.minecraft.commands.CommandSourceStack;
 import org.jetbrains.annotations.Nullable;
 import remapped.architectury.event.Event;
 import remapped.architectury.event.EventActor;
+import remapped.architectury.event.EventResult;
+
+import java.util.function.Function;
 
 public class CommandPerformEvent {
     static class Inner extends remapped.architectury.event.events.common.CommandPerformEvent {
@@ -14,7 +17,7 @@ public class CommandPerformEvent {
         }
     }
 
-    public static final Event<EventActor<CommandPerformEvent>> EVENT = EventWrapper.of(Inner.EVENT, null);
+    public static final Event<EventActor<CommandPerformEvent>> EVENT = EventWrapper.of(Inner.EVENT, commandPerformEventEventActor -> commandPerformEvent -> commandPerformEventEventActor.act(new CommandPerformEvent(commandPerformEvent)));
 
     private ParseResults<CommandSourceStack> results;
     @Nullable
@@ -23,6 +26,11 @@ public class CommandPerformEvent {
     public CommandPerformEvent(ParseResults<CommandSourceStack> results, @Nullable Throwable throwable) {
         this.results = results;
         this.throwable = throwable;
+    }
+
+    public CommandPerformEvent(remapped.architectury.event.events.common.CommandPerformEvent commandPerformEvent) {
+        this.results = commandPerformEvent.getResults();
+        this.throwable = commandPerformEvent.getThrowable();
     }
 
     public ParseResults<CommandSourceStack> getResults() {

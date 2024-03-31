@@ -13,8 +13,17 @@ public interface ClientScreenInputEvent {
     interface Inner extends remapped.architectury.event.events.client.ClientScreenInputEvent {
     }
 
-    Event<MouseScrolled> MOUSE_SCROLLED_PRE = EventWrapper.of(Inner.MOUSE_SCROLLED_PRE, mouseScrolled -> ((minecraft, screen, v, v1, v2, v3) -> EventResult.map(mouseScrolled.mouseScrolled(minecraft, screen, v, v1, v2, v3))));
-    Event<MouseScrolled> MOUSE_SCROLLED_POST = EventWrapper.of(Inner.MOUSE_SCROLLED_POST, mouseScrolled -> ((minecraft, screen, v, v1, v2, v3) -> EventResult.map(mouseScrolled.mouseScrolled(minecraft, screen, v, v1, v2, v3))));
+    private static remapped.architectury.event.events.client.ClientScreenInputEvent.MouseScrolled mapMouseScrolled(MouseScrolled mouseScrolled) {
+        #if MC_VER < MC_1_20_2
+        // only one scroll amount value exists in older versions
+        return ((minecraft, screen, v, v1, v2) -> EventResult.map(mouseScrolled.mouseScrolled(minecraft, screen, v, v1, v2, v2)));
+        #else
+        return ((minecraft, screen, v, v1, v2, v3) -> EventResult.map(mouseScrolled.mouseScrolled(minecraft, screen, v, v1, v2, v3)));
+        #endif
+    }
+
+    Event<MouseScrolled> MOUSE_SCROLLED_PRE = EventWrapper.of(Inner.MOUSE_SCROLLED_PRE, ClientScreenInputEvent::mapMouseScrolled);
+    Event<MouseScrolled> MOUSE_SCROLLED_POST = EventWrapper.of(Inner.MOUSE_SCROLLED_POST, ClientScreenInputEvent::mapMouseScrolled);
     Event<MouseClicked> MOUSE_CLICKED_PRE = EventWrapper.of(Inner.MOUSE_CLICKED_PRE, mouseClicked -> ((minecraft, screen, v, v1, i) -> EventResult.map(mouseClicked.mouseClicked(minecraft, screen, v, v1, i))));
     Event<MouseClicked> MOUSE_CLICKED_POST = EventWrapper.of(Inner.MOUSE_CLICKED_POST, mouseClicked -> ((minecraft, screen, v, v1, i) -> EventResult.map(mouseClicked.mouseClicked(minecraft, screen, v, v1, i))));
     Event<MouseReleased> MOUSE_RELEASED_PRE = EventWrapper.of(Inner.MOUSE_RELEASED_PRE, mouseReleased -> ((minecraft, screen, v, v1, i) -> EventResult.map(mouseReleased.mouseReleased(minecraft, screen, v, v1, i))));
