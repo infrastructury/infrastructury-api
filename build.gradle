@@ -8,6 +8,8 @@ plugins {
 
 import groovy.json.JsonSlurper
 
+import java.security.MessageDigest
+
 def writeBuildGradlePredefine(List<String> mcVers, int mcIndex) {
     // Build the list of preprocessors to use
     StringBuilder sb = new StringBuilder();
@@ -51,6 +53,39 @@ architectury {
     minecraft = rootProject.minecraft_version
 }
 
+import net.fabricmc.tinyremapper.NonClassCopyMode
+import net.fabricmc.tinyremapper.OutputConsumerPath
+import net.fabricmc.tinyremapper.TinyRemapper
+import net.fabricmc.tinyremapper.TinyUtils
+
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+import java.security.MessageDigest
+
+var mappingsProjectDir = project(":mappings").projectDir.toPath()
+var mappingsTinyFile = new File(mappingsProjectDir.resolve("arch_${rootProject.architectury_version}.tiny").toUri())
+var hashHex = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest(mappingsTinyFile.readBytes()))
+
+static void runMappingsOnJar(File input, File output, File mappingsTiny, String fromM, String toM) {
+    def remapper = TinyRemapper.newRemapper()
+            .withMappings(TinyUtils.createTinyMappingProvider(mappingsTiny.toPath(), fromM, toM))
+            .renameInvalidLocals(false)
+            .build()
+
+    output.delete()
+
+    try (OutputConsumerPath outputConsumer = new OutputConsumerPath.Builder(output.toPath()).build()) {
+        outputConsumer.addNonClassFiles(input.toPath(), NonClassCopyMode.FIX_META_INF, remapper)
+        remapper.readInputs(input.toPath())
+        remapper.readClassPath(input.toPath())
+        remapper.apply(outputConsumer)
+    } catch (IOException e) {
+        throw new RuntimeException(e)
+    } finally {
+        remapper.finish()
+    }
+}
+
 subprojects { p ->
     apply plugin: "java"
     apply plugin: "dev.architectury.loom"
@@ -62,6 +97,10 @@ subprojects { p ->
 
     // set up custom configurations (configurations are a way to handle dependencies)
     configurations {
+        compile
+        mappings
+        addArchApi
+
         // extends the shadowJar configuration
         shadowMe
         // have implemented dependencies automatically embedded in the final jar
@@ -91,6 +130,12 @@ subprojects { p ->
         }
     }
 
+    String platformStr = ""
+    if (findProject(":common") && p != project(":common")) {
+        if (findProject(":quilt") && p == project(":quilt")) platformStr = "-fabric"
+        else platformStr = "-${p.name}"
+    }
+
     dependencies {
         annotationProcessor("systems.manifold:manifold-preprocessor:${rootProject.manifold_version}")
 
@@ -100,10 +145,57 @@ subprojects { p ->
             parchment("org.parchmentmc.data:parchment-${rootProject.parchment_version}@zip")
         }
 
+        if (p.name == "quilt") {
+            modApi("${rootProject.architectury_group}:architectury-fabric:${rootProject.architectury_version}") {
+                exclude group: "net.fabricmc"
+                exclude group: "net.fabricmc.fabric-api"
+            }
+        } else {
+            addArchApi "${rootProject.architectury_group}:architectury${platformStr}:${rootProject.architectury_version}"
+        }
+
         if (p != project(":common")) {
             common(project(path: ":common", configuration: "namedElements")) { transitive false }
             shadowCommon(project(path: ":common", configuration: "transformProduction${capitalProject(p.name)}")) { transitive false }
         }
+    }
+
+    if (findProject(":mappings") && p != project(":mappings")) {
+        tasks.register('applyMappings') {
+            File remappedArchFile = new File(rootProject.projectDir, ".gradle/remapped_architectury_cache/${hashHex}/remapped-architectury-${p.name}-${rootProject.architectury_version}.jar")
+            if (!remappedArchFile.exists()) {
+                var archJarPath = "/architectury${platformStr}-${rootProject.architectury_version}.jar"
+                println "Searching for architectury jar: $archJarPath"
+
+                File archJar = configurations.addArchApi.files.find { it.path.endsWith(archJarPath) }
+                println "Found matching jar: ${archJar.name}"
+                println "Using mappings: ${mappingsTinyFile.name}"
+
+                runMappingsOnJar(archJar, remappedArchFile, mappingsTinyFile, "official", "named")
+
+                println "Remapping completed successfully."
+            }
+            dependencies {
+                modApi files(remappedArchFile.toPath())
+            }
+            return
+        }
+
+        compileJava.dependsOn applyMappings
+
+        tasks.register('undoApplyMappings') {
+            doLast {
+                File mergedJar = new File(rootProject.layout.projectDirectory.asFile, "Merged/${rootProject.forgix_merged_jar}")
+                if (!mergedJar.exists()) throw new GradleException("Missing merged output jar")
+                File remapFile = new File(mergedJar.parentFile, mergedJar.name + ".remapped.jar")
+                runMappingsOnJar(mergedJar, remapFile, mappingsTiny, "named", "official")
+                mergedJar.delete()
+                Files.copy(remapFile.toPath(), mergedJar.toPath(), StandardCopyOption.REPLACE_EXISTING)
+                remapFile.delete()
+            }
+        }
+
+        rootProject.tasks['mergeJars'].finalizedBy undoApplyMappings
     }
 }
 

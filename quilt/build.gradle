@@ -28,12 +28,6 @@ dependencies {
     modApi("org.quiltmc.quilted-fabric-api:quilted-fabric-api:${rootProject.quilt_fabric_api_version}") {
         exclude group: "net.fabricmc.fabric-api"
     }
-    // Remove the next few lines if you don't want to depend on the API
-    modApi("${rootProject.architectury_group}:architectury-fabric:${rootProject.architectury_version}") {
-        // We must not pull Fabric Loader from Architectury Fabric
-        exclude group: "net.fabricmc"
-        exclude group: "net.fabricmc.fabric-api"
-    }
 
     modApi("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}") {
         exclude(group: "net.fabricmc")
