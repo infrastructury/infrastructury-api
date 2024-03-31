@@ -28,6 +28,7 @@ bin/
 
 run/
 build.properties
+mcver.properties
 *.build.log
 .architectury-transformer/
 buildAllJars/

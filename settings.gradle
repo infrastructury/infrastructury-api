@@ -9,24 +9,40 @@ pluginManagement {
     }
 }
 
+gradle.ext.set("versionStr", "")
+gradle.ext.set("compatible_forge_versions", "")
+gradle.ext.set("forgix_merged_jar", "")
+
 // Loads the version.properties
 def loadProperties() {
-    def defaultMcVersion = "1.20.1" // 1.20.1 is our current most stable version so we use that if no version was defined
-
+    def defaultMcVersion = ""
     def mcVersion = ""
     def mcVers = fileTree("versionProperties").files.name // Get all the files in "versionProperties"
     for (int i = 0; i < mcVers.size(); i++) {
         mcVers[i] = mcVers[i].replaceAll("\\.properties", "") // As we are getting the file names, we should remove the ".properties" at the end to get the versions
     }
+    assert mcVers.size > 0
 
     mcVers.sort() // Sort so it always goes from oldest to newest
+    defaultMcVersion = mcVers[mcVers.size - 1]
 
-    int mcIndex = -1
+    File mcVerPropsFile = file("mcver.properties")
+    if (!mcVerPropsFile.exists()) {
+        mcVerPropsFile.text = "# Modify this property to edit the local Minecraft version to use when compiling\nmcVer=" + defaultMcVersion + "\n"
+    }
+
     println "Avalible MC versions: ${mcVers}"
     if (hasProperty("mcVer")) {
+        println "Using mcVer command line argument"
         mcVersion = mcVer
-        mcIndex = mcVers.indexOf(mcVer)
+    } else {
+        println "Using mcver.properties file"
+        def mcVerProps = new Properties()
+        mcVerProps.load(new FileInputStream(mcVerPropsFile))
+        mcVersion = mcVerProps.get("mcVer")
     }
+
+    int mcIndex = mcVers.indexOf(mcVersion)
     if (mcIndex == -1) {
         println "No mcVer set or the set mcVer is invalid! Defaulting to ${defaultMcVersion}."
         println "Tip: Use -PmcVer=\"${defaultMcVersion}\" in cmd arg to set mcVer."
