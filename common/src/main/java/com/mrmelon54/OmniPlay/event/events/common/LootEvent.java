@@ -1,15 +1,20 @@
 package com.mrmelon54.OmniPlay.event.events.common;
 
 import com.mrmelon54.OmniPlay.event.EventWrapper;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.level.storage.loot.LootDataManager;
 import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTables;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import remapped.architectury.event.Event;
+
+#if MC_VER < MC_1_20_1
+import net.minecraft.world.level.storage.loot.LootTables;
+#endif
+
+#if MC_VER < MC_1_18_2
+import dev.architectury.injectables.annotations.ExpectPlatform;
+#endif
 
 public interface LootEvent {
     #if MC_VER >= MC_1_18_2
@@ -17,7 +22,9 @@ public interface LootEvent {
     }
 
     private static remapped.architectury.event.events.common.LootEvent.ModifyLootTable mapModifyLootTable(ModifyLootTable modifyLootTable) {
-        #if MC_VER >= MC_1_18_2 && MC_VER < MC_1_20_1
+        #if MC_VER < MC_1_18_2
+        return null;
+        #elif MC_VER < MC_1_20_1
         return ((lootDataManager, resourceLocation, lootTableModificationContext, b) -> modifyLootTable.modifyLootTable(new LootDataManager(lootDataManager), resourceLocation, lootTableModificationContext::addPool, b));
         #else
         return ((lootDataManager, resourceLocation, lootTableModificationContext, b) -> modifyLootTable.modifyLootTable(lootDataManager, resourceLocation, lootTableModificationContext::addPool, b));
@@ -27,7 +34,9 @@ public interface LootEvent {
 
     Event<ModifyLootTable> MODIFY_LOOT_TABLE = resolveModifyLootTable();
 
+    #if MC_VER < MC_1_18_2
     @ExpectPlatform
+    #endif
     static Event<ModifyLootTable> resolveModifyLootTable() {
         #if MC_VER < MC_1_18_2
         throw new AssertionError("missing resolveModifyLootTable()");

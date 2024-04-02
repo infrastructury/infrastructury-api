@@ -3,16 +3,19 @@ package com.mrmelon54.OmniPlay.event.events.common;
 import com.mrmelon54.OmniPlay.event.EventResult;
 import com.mrmelon54.OmniPlay.event.EventWrapper;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.TextFilter;
-import net.minecraft.util.FormattedCharSequence;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import remapped.architectury.event.Event;
 
+#if MC_VER < MC_1_19_2
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.server.network.TextFilter;
+import net.minecraft.util.FormattedCharSequence;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
+#endif
 
 public interface ChatEvent {
     interface Inner extends remapped.architectury.event.events.common.ChatEvent {

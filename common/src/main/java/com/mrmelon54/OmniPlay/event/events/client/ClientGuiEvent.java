@@ -23,8 +23,7 @@ public interface ClientGuiEvent {
         #if MC_VER == MC_1_16_5
         return (screen, a, b) -> EventResult.map(x.init(screen, () -> screen));
         #else
-            return null;
-//        return (screen, screenAccess) -> EventResult.map(x.init(screen, screenAccess::getScreen));
+        return (screen, screenAccess) -> EventResult.map(x.init(screen, screenAccess::getScreen));
         #endif
     }
 
@@ -32,8 +31,7 @@ public interface ClientGuiEvent {
         #if MC_VER == MC_1_16_5
         return (screen, a, b) -> x.init(screen, () -> screen);
         #else
-            return null;
-//        return (screen, screenAccess) -> x.init(screen, screenAccess::getScreen);
+        return (screen, screenAccess) -> x.init(screen, screenAccess::getScreen);
         #endif
     }
 

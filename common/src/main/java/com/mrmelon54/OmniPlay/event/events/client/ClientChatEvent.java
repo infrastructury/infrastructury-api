@@ -5,7 +5,6 @@ import com.mrmelon54.OmniPlay.event.EventResult;
 import com.mrmelon54.OmniPlay.event.EventWrapper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.ChatType$Bound;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;

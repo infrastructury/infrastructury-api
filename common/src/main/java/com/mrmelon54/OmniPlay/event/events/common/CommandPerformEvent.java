@@ -6,9 +6,6 @@ import net.minecraft.commands.CommandSourceStack;
 import org.jetbrains.annotations.Nullable;
 import remapped.architectury.event.Event;
 import remapped.architectury.event.EventActor;
-import remapped.architectury.event.EventResult;
-
-import java.util.function.Function;
 
 public class CommandPerformEvent {
     static class Inner extends remapped.architectury.event.events.common.CommandPerformEvent {
