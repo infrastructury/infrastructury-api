@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import remapped.architectury.event.Event;
 
 public interface LootEvent {
+    #if MC_VER >= MC_1_18_2
     interface Inner extends remapped.architectury.event.events.common.LootEvent {
     }
 
@@ -22,12 +23,17 @@ public interface LootEvent {
         return ((lootDataManager, resourceLocation, lootTableModificationContext, b) -> modifyLootTable.modifyLootTable(lootDataManager, resourceLocation, lootTableModificationContext::addPool, b));
         #endif
     }
+    #endif
 
     Event<ModifyLootTable> MODIFY_LOOT_TABLE = resolveModifyLootTable();
 
     @ExpectPlatform
     static Event<ModifyLootTable> resolveModifyLootTable() {
+        #if MC_VER < MC_1_18_2
+        throw new AssertionError("missing resolveModifyLootTable()");
+        #else
         return EventWrapper.of(Inner.MODIFY_LOOT_TABLE, LootEvent::mapModifyLootTable);
+        #endif
     }
 
     @FunctionalInterface

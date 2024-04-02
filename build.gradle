@@ -146,7 +146,7 @@ subprojects { p ->
         }
 
         if (p.name == "quilt") {
-            modApi("${rootProject.architectury_group}:architectury-fabric:${rootProject.architectury_version}") {
+            addArchApi("${rootProject.architectury_group}:architectury-fabric:${rootProject.architectury_version}") {
                 exclude group: "net.fabricmc"
                 exclude group: "net.fabricmc.fabric-api"
             }
