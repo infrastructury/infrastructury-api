@@ -13,14 +13,14 @@ public class CompoundEventResult<T> {
     }
 
     #if MC_VER == MC_1_16_5
-    public static <T> InteractionResultHolder<T> map(CompoundEventResult<T> result) {
+    public static <T> InteractionResultHolder<T> map2(CompoundEventResult<T> result) {
         return mapInternal(result).asMinecraft();
     }
-    #else
+    #endif
+
     public static <T> remapped.architectury.event.CompoundEventResult<T> map(CompoundEventResult<T> result) {
         return mapInternal(result);
     }
-    #endif
 
     public static <T> com.mrmelon54.OmniPlay.event.CompoundEventResult<T> fromEventResult(EventResult result) {
         return CompoundEventResult.interrupt(result.value(), null);

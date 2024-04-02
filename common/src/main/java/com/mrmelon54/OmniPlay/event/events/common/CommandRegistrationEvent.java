@@ -1,5 +1,6 @@
 package com.mrmelon54.OmniPlay.event.events.common;
 
+#if MC_VER != MC_1_16_5
 import com.mojang.brigadier.CommandDispatcher;
 import com.mrmelon54.OmniPlay.event.EventWrapper;
 import net.minecraft.commands.CommandBuildContext;
@@ -12,7 +13,7 @@ public interface CommandRegistrationEvent {
 
     }
 
-    private static remapped.architectury.event.events.common.CommandRegistrationEvent mapCommandRegistrationEvent(CommandRegistrationEvent commandRegistrationEvent) {
+    static remapped.architectury.event.events.common.CommandRegistrationEvent mapCommandRegistrationEvent(CommandRegistrationEvent commandRegistrationEvent) {
         #if MC_VER < MC_1_19_2
         return ((commandDispatcher, commandSelection) -> commandRegistrationEvent.register(commandDispatcher, null, commandSelection));
         #else
@@ -24,3 +25,4 @@ public interface CommandRegistrationEvent {
 
     void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection);
 }
+#endif

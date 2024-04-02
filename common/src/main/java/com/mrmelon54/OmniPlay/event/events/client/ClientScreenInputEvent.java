@@ -13,7 +13,7 @@ public interface ClientScreenInputEvent {
     interface Inner extends remapped.architectury.event.events.client.ClientScreenInputEvent {
     }
 
-    private static remapped.architectury.event.events.client.ClientScreenInputEvent.MouseScrolled mapMouseScrolled(MouseScrolled mouseScrolled) {
+    static remapped.architectury.event.events.client.ClientScreenInputEvent.MouseScrolled mapMouseScrolled(MouseScrolled mouseScrolled) {
         #if MC_VER < MC_1_20_2
         // only one scroll amount value exists in older versions
         return ((minecraft, screen, v, v1, v2) -> EventResult.map(mouseScrolled.mouseScrolled(minecraft, screen, v, v1, v2, v2)));

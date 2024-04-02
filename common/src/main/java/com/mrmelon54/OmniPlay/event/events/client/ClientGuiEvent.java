@@ -19,7 +19,7 @@ public interface ClientGuiEvent {
     interface Inner extends remapped.architectury.event.events.client.ClientGuiEvent {
     }
 
-    private static remapped.architectury.event.events.client.ClientGuiEvent.ScreenInitPre mapScreenInitPre(ScreenInitPre x) {
+    static remapped.architectury.event.events.client.ClientGuiEvent.ScreenInitPre mapScreenInitPre(ScreenInitPre x) {
         #if MC_VER == MC_1_16_5
         return (screen, a, b) -> EventResult.map(x.init(screen, () -> screen));
         #else
@@ -27,7 +27,7 @@ public interface ClientGuiEvent {
         #endif
     }
 
-    private static remapped.architectury.event.events.client.ClientGuiEvent.ScreenInitPost mapScreenInitPost(ScreenInitPost x) {
+    static remapped.architectury.event.events.client.ClientGuiEvent.ScreenInitPost mapScreenInitPost(ScreenInitPost x) {
         #if MC_VER == MC_1_16_5
         return (screen, a, b) -> x.init(screen, () -> screen);
         #else

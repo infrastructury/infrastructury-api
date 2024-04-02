@@ -1,13 +1,19 @@
 package com.mrmelon54.OmniPlay.event.events.client;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrmelon54.OmniPlay.event.EventResult;
 import com.mrmelon54.OmniPlay.event.EventWrapper;
 import com.mrmelon54.OmniPlay.util.Graphics;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FormattedText;
+import net.minecraft.util.FormattedCharSequence;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.ApiStatus;
@@ -16,14 +22,71 @@ import remapped.architectury.event.Event;
 import remapped.architectury.impl.TooltipAdditionalContextsImpl;
 
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Environment(EnvType.CLIENT)
 public interface ClientTooltipEvent {
     interface Inner extends remapped.architectury.event.events.client.ClientTooltipEvent {
     }
 
+    static Event<Render> resolveRenderPre() {
+        #if MC_VER == MC_1_16_5
+        return new Event<Render>() {
+            @Override
+            public Render invoker() {
+                throw new RuntimeException("cannot invoke EventWrapper");
+            }
+
+            @Override
+            public void register(Render render) {
+                Inner.RENDER_VANILLA_PRE.register((poseStack, list, i, i1) -> render.renderTooltip(Graphics.get(poseStack), list.stream().map((Function<FormattedCharSequence, ClientTooltipComponent>) formattedCharSequence -> new ClientTooltipComponent() {
+                    @Override
+                    public int getHeight() {
+                        return 10;
+                    }
+
+                    @Override
+                    public int getWidth(Font font) {
+                        return font.width(formattedCharSequence);
+                    }
+                }).collect(Collectors.toList()), i, i1).asMinecraft());
+                Inner.RENDER_FORGE_PRE.register((poseStack, list, i, i1) -> render.renderTooltip(Graphics.get(poseStack), list.stream().map((Function<FormattedText, ClientTooltipComponent>) formattedText -> new ClientTooltipComponent() {
+                    @Override
+                    public int getHeight() {
+                        return 10;
+                    }
+
+                    @Override
+                    public int getWidth(Font font) {
+                        return font.width(formattedText);
+                    }
+                }).collect(Collectors.toList()), i, i1).asMinecraft());
+            }
+
+            @Override
+            public void unregister(Render render) {
+                throw new RuntimeException("cannot invoke unregister");
+            }
+
+            @Override
+            public boolean isRegistered(Render render) {
+                throw new RuntimeException("cannot invoke isRegistered");
+            }
+
+            @Override
+            public void clearListeners() {
+
+            }
+        };
+        #else
+        return EventWrapper.of(Inner.RENDER_PRE, render -> ((guiGraphics, list, i, i1) -> EventResult.map(render.renderTooltip(Graphics.get(guiGraphics), list, i, i1))));
+        #endif
+    }
+
     Event<Item> ITEM = EventWrapper.of(Inner.ITEM, item -> item::append);
-    Event<Render> RENDER_PRE = EventWrapper.of(Inner.RENDER_PRE, render -> ((guiGraphics, list, i, i1) -> EventResult.map(render.renderTooltip(Graphics.get(guiGraphics), list, i, i1))));
+    Event<Render> RENDER_PRE = resolveRenderPre();
+
     Event<RenderModifyPosition> RENDER_MODIFY_POSITION = EventWrapper.of(Inner.RENDER_MODIFY_POSITION, renderModifyPosition -> ((guiGraphics, positionContext) -> renderModifyPosition.renderTooltip(Graphics.get(guiGraphics), new PositionContext() {
         @Override
         public int getTooltipX() {

@@ -160,6 +160,10 @@ subprojects { p ->
         }
     }
 
+    repositories {
+        maven { url "https://maven.shedaniel.me/" }
+    }
+
     if (findProject(":mappings") && p != project(":mappings")) {
         tasks.register('applyMappings') {
             File remappedArchFile = new File(rootProject.projectDir, ".gradle/remapped_architectury_cache/${hashHex}/remapped-architectury-${p.name}-${rootProject.architectury_version}.jar")

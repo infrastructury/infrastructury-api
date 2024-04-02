@@ -9,7 +9,7 @@ import net.minecraft.client.Minecraft;
 
 @Environment(EnvType.CLIENT)
 public interface ClientRawInputEvent {
-    private static remapped.architectury.event.events.client.ClientRawInputEvent.MouseScrolled mapMouseScrolled(MouseScrolled mouseScrolled) {
+    static remapped.architectury.event.events.client.ClientRawInputEvent.MouseScrolled mapMouseScrolled(MouseScrolled mouseScrolled) {
         #if MC_VER < MC_1_20_2
         return (minecraft, v) -> EventResult.map(mouseScrolled.mouseScrolled(minecraft, v, v));
         #else

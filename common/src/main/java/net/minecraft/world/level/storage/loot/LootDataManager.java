@@ -1,6 +1,6 @@
 package net.minecraft.world.level.storage.loot;
 
-#if MC_VER < MC_1_20_1
+#if MC_VER > MC_1_16_5 && MC_VER < MC_1_20_1
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;

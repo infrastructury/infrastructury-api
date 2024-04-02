@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 import remapped.architectury.event.Event;
 
 public interface PlayerEvent {
-    private static remapped.architectury.event.events.common.PlayerEvent.PlayerAdvancement mapPlayerAdvancement(PlayerAdvancement playerAdvancement) {
+    static remapped.architectury.event.events.common.PlayerEvent.PlayerAdvancement mapPlayerAdvancement(PlayerAdvancement playerAdvancement) {
         #if MC_VER < MC_1_20_2
         return ((serverPlayer, advancement) -> playerAdvancement.award(serverPlayer, new AdvancementHolder(advancement.getId(), advancement)));
         #else
@@ -45,7 +45,9 @@ public interface PlayerEvent {
     Event<OpenMenu> OPEN_MENU = EventWrapper.of(Inner.OPEN_MENU, openMenu -> openMenu::open);
     Event<CloseMenu> CLOSE_MENU = EventWrapper.of(Inner.CLOSE_MENU, closeMenu -> closeMenu::close);
     Event<FillBucket> FILL_BUCKET = EventWrapper.of(Inner.FILL_BUCKET, fillBucket -> ((player, level, itemStack, hitResult) -> CompoundEventResult.map(fillBucket.fill(player, level, itemStack, hitResult))));
+    #if MC_VER != MC_1_16_5
     Event<AttackEntity> ATTACK_ENTITY = EventWrapper.of(Inner.ATTACK_ENTITY, attackEntity -> ((player, level, entity, interactionHand, entityHitResult) -> EventResult.map(attackEntity.attack(player, level, entity, interactionHand, entityHitResult))));
+    #endif
 
     interface PlayerJoin {
         void join(ServerPlayer player);

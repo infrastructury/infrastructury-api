@@ -1,5 +1,6 @@
 package com.mrmelon54.OmniPlay.event.events.client;
 
+#if MC_VER != MC_1_16_5
 import com.mrmelon54.OmniPlay.event.EventWrapper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -24,3 +25,4 @@ public interface ClientReloadShadersEvent {
         void registerShader(ShaderInstance shader, Consumer<ShaderInstance> callback);
     }
 }
+#endif

@@ -1,5 +1,6 @@
 package com.mrmelon54.OmniPlay.event.events.common;
 
+#if MC_VER != MC_1_16_5
 import com.mrmelon54.OmniPlay.event.EventWrapper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootDataManager;
@@ -59,3 +60,4 @@ public interface LootEvent {
         }
     }
 }
+#endif
