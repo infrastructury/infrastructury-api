@@ -1,6 +1,6 @@
 package net.minecraft.commands;
 
-#if MC_VER > MC_1_16_5 && MC_VER < MC_1_20_1
+#if MC_VER > MC_1_17_1 && MC_VER < MC_1_20_1
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;

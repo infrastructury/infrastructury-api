@@ -32,6 +32,10 @@ public final class EventResult {
         return remapped.architectury.event.EventResult.interrupt(result.interruptsFurtherEvaluation);
     }
 
+    public static remapped.architectury.event.EventResult map(remapped.architectury.event.EventResult result) {
+        return result;
+    }
+
     public static EventResult pass() {
         return PASS;
     }

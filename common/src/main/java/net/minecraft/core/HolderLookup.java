@@ -1,6 +1,6 @@
 package net.minecraft.core;
 
-#if MC_VER > MC_1_16_5 && MC_VER < MC_1_20_1
+#if MC_VER > MC_1_17_1 && MC_VER < MC_1_20_1
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 

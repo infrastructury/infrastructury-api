@@ -45,7 +45,7 @@ public interface PlayerEvent {
     Event<OpenMenu> OPEN_MENU = EventWrapper.of(Inner.OPEN_MENU, openMenu -> openMenu::open);
     Event<CloseMenu> CLOSE_MENU = EventWrapper.of(Inner.CLOSE_MENU, closeMenu -> closeMenu::close);
     Event<FillBucket> FILL_BUCKET = EventWrapper.of(Inner.FILL_BUCKET, fillBucket -> ((player, level, itemStack, hitResult) -> CompoundEventResult.map(fillBucket.fill(player, level, itemStack, hitResult))));
-    #if MC_VER != MC_1_16_5
+    #if MC_VER > MC_1_17_1
     Event<AttackEntity> ATTACK_ENTITY = EventWrapper.of(Inner.ATTACK_ENTITY, attackEntity -> ((player, level, entity, interactionHand, entityHitResult) -> EventResult.map(attackEntity.attack(player, level, entity, interactionHand, entityHitResult))));
     #endif
 

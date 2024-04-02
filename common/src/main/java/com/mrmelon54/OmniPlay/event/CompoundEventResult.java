@@ -7,19 +7,19 @@ public class CompoundEventResult<T> {
     private final EventResult result;
     private final T object;
 
-    private static <T> remapped.architectury.event.CompoundEventResult<T> mapInternal(CompoundEventResult<T> result) {
-        if (result.equals(PASS)) return remapped.architectury.event.CompoundEventResult.pass();
-        return remapped.architectury.event.CompoundEventResult.interrupt(result.result.value(), result.object);
-    }
-
     #if MC_VER == MC_1_16_5
     public static <T> InteractionResultHolder<T> map2(CompoundEventResult<T> result) {
-        return mapInternal(result).asMinecraft();
+        return map(result).asMinecraft();
+    }
+    #else
+    public static <T> remapped.architectury.event.CompoundEventResult<T> map2(CompoundEventResult<T> result) {
+        return map(result);
     }
     #endif
 
     public static <T> remapped.architectury.event.CompoundEventResult<T> map(CompoundEventResult<T> result) {
-        return mapInternal(result);
+        if (result.equals(PASS)) return remapped.architectury.event.CompoundEventResult.pass();
+        return remapped.architectury.event.CompoundEventResult.interrupt(result.result.value(), result.object);
     }
 
     public static <T> com.mrmelon54.OmniPlay.event.CompoundEventResult<T> fromEventResult(EventResult result) {

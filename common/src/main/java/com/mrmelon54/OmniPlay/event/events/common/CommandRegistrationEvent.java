@@ -1,6 +1,6 @@
 package com.mrmelon54.OmniPlay.event.events.common;
 
-#if MC_VER != MC_1_16_5
+#if MC_VER > MC_1_18_2
 import com.mojang.brigadier.CommandDispatcher;
 import com.mrmelon54.OmniPlay.event.EventWrapper;
 import net.minecraft.commands.CommandBuildContext;

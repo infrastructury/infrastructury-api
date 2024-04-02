@@ -1,29 +1,33 @@
 package com.mrmelon54.OmniPlay.event.events.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mrmelon54.OmniPlay.event.EventResult;
 import com.mrmelon54.OmniPlay.event.EventWrapper;
 import com.mrmelon54.OmniPlay.util.Graphics;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.FormattedText;
-import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import remapped.architectury.event.Event;
-import remapped.architectury.impl.TooltipAdditionalContextsImpl;
 
 import java.util.List;
+
+#if MC_VER > MC_1_17_1
+import remapped.architectury.impl.TooltipAdditionalContextsImpl;
+#endif
+
+#if MC_VER <= MC_1_17_1
+import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.FormattedText;
+import net.minecraft.util.FormattedCharSequence;
+
 import java.util.function.Function;
 import java.util.stream.Collectors;
+#endif
 
 @Environment(EnvType.CLIENT)
 public interface ClientTooltipEvent {
@@ -31,7 +35,7 @@ public interface ClientTooltipEvent {
     }
 
     static Event<Render> resolveRenderPre() {
-        #if MC_VER == MC_1_16_5
+        #if MC_VER <= MC_1_17_1
         return new Event<Render>() {
             @Override
             public Render invoker() {
@@ -40,7 +44,7 @@ public interface ClientTooltipEvent {
 
             @Override
             public void register(Render render) {
-                Inner.RENDER_VANILLA_PRE.register((poseStack, list, i, i1) -> render.renderTooltip(Graphics.get(poseStack), list.stream().map((Function<FormattedCharSequence, ClientTooltipComponent>) formattedCharSequence -> new ClientTooltipComponent() {
+                Inner.RENDER_VANILLA_PRE.register((poseStack, list, i, i1) -> EventResult.map2(render.renderTooltip(Graphics.get(poseStack), list.stream().map((Function<FormattedCharSequence, ClientTooltipComponent>) formattedCharSequence -> new ClientTooltipComponent() {
                     @Override
                     public int getHeight() {
                         return 10;
@@ -50,8 +54,8 @@ public interface ClientTooltipEvent {
                     public int getWidth(Font font) {
                         return font.width(formattedCharSequence);
                     }
-                }).collect(Collectors.toList()), i, i1).asMinecraft());
-                Inner.RENDER_FORGE_PRE.register((poseStack, list, i, i1) -> render.renderTooltip(Graphics.get(poseStack), list.stream().map((Function<FormattedText, ClientTooltipComponent>) formattedText -> new ClientTooltipComponent() {
+                }).collect(Collectors.toList()), i, i1)));
+                Inner.RENDER_FORGE_PRE.register((poseStack, list, i, i1) -> EventResult.map2(render.renderTooltip(Graphics.get(poseStack), list.stream().map((Function<FormattedText, ClientTooltipComponent>) formattedText -> new ClientTooltipComponent() {
                     @Override
                     public int getHeight() {
                         return 10;
@@ -61,7 +65,7 @@ public interface ClientTooltipEvent {
                     public int getWidth(Font font) {
                         return font.width(formattedText);
                     }
-                }).collect(Collectors.toList()), i, i1).asMinecraft());
+                }).collect(Collectors.toList()), i, i1)));
             }
 
             @Override
@@ -141,6 +145,19 @@ public interface ClientTooltipEvent {
     })));
 
     static AdditionalContexts additionalContexts() {
+        #if MC_VER <= MC_1_17_1
+        // TODO: support additional contexts in 1.17.1 and below
+        return new AdditionalContexts() {
+            @Override
+            public @Nullable ItemStack getItem() {
+                return null;
+            }
+
+            @Override
+            public void setItem(@Nullable ItemStack stack) {
+            }
+        };
+        #else
         remapped.architectury.event.events.client.ClientTooltipEvent.AdditionalContexts additionalContexts = TooltipAdditionalContextsImpl.get();
         return new AdditionalContexts() {
             @Override
@@ -153,6 +170,7 @@ public interface ClientTooltipEvent {
                 additionalContexts.setItem(stack);
             }
         };
+        #endif
     }
 
     @ApiStatus.NonExtendable
