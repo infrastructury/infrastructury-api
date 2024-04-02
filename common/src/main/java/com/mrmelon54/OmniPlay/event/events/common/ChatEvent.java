@@ -4,6 +4,7 @@ import com.mrmelon54.OmniPlay.event.EventResult;
 import com.mrmelon54.OmniPlay.event.EventWrapper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResultHolder;
 import org.jetbrains.annotations.Nullable;
 import remapped.architectury.event.Event;
 
@@ -15,6 +16,7 @@ import net.minecraft.util.FormattedCharSequence;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Function;
 #endif
 
 public interface ChatEvent {
@@ -37,7 +39,9 @@ public interface ChatEvent {
     Event<Received> RECEIVED = resolveReceivedEvent();
 
     static Event<Received> resolveReceivedEvent() {
-        #if MC_VER < MC_1_19_2
+        #if MC_VER == MC_1_16_5
+        return EventWrapper.of(Inner.SERVER, received -> (serverPlayer, s, component) -> new InteractionResultHolder<>(EventResult.map(received.received(serverPlayer, component)), component));
+        #elif MC_VER < MC_1_19_2
         return EventWrapper.of(Inner.SERVER, received -> (serverPlayer, filteredText, component) -> EventResult.map(received.received(serverPlayer, new Component() {
             @Override
             public @NotNull Style getStyle() {

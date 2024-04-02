@@ -13,6 +13,10 @@ public final class EventResult {
     public static InteractionResult map(EventResult result) {
         return result.asMinecraft();
     }
+
+    public static InteractionResult map(remapped.architectury.event.EventResult result) {
+        return map(EventResult.interrupt(result.value()));
+    }
     #else
     public static remapped.architectury.event.EventResult map(EventResult result) {
         return remapped.architectury.event.EventResult.interrupt(result.interruptsFurtherEvaluation);
