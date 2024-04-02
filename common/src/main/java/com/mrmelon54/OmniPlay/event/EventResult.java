@@ -22,6 +22,10 @@ public final class EventResult {
     public static remapped.architectury.event.EventResult map2(EventResult result) {
         return map(result);
     }
+
+    public static remapped.architectury.event.EventResult map2(remapped.architectury.event.EventResult result) {
+        return result;
+    }
     #endif
 
     public static remapped.architectury.event.EventResult map(EventResult result) {
