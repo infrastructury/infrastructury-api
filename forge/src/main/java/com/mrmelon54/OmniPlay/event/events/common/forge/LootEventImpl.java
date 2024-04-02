@@ -1,6 +1,6 @@
 package com.mrmelon54.OmniPlay.event.events.common.forge;
 
-#if MC_VER < MC_1_18_2
+#if MC_VER > MC_1_16_5 && MC_VER < MC_1_18_2
 import com.mrmelon54.OmniPlay.event.events.common.LootEvent;
 import net.minecraft.world.level.storage.loot.LootDataManager;
 import net.minecraftforge.event.LootTableLoadEvent;

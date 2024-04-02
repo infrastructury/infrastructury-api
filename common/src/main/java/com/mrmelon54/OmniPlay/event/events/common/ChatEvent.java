@@ -40,7 +40,7 @@ public interface ChatEvent {
 
     static Event<Received> resolveReceivedEvent() {
         #if MC_VER == MC_1_16_5
-        return EventWrapper.of(Inner.SERVER, received -> (serverPlayer, s, component) -> new InteractionResultHolder<>(EventResult.map(received.received(serverPlayer, component)), component));
+        return EventWrapper.of(Inner.SERVER, received -> (serverPlayer, s, component) -> new InteractionResultHolder<>(EventResult.map2(received.received(serverPlayer, component)), component));
         #elif MC_VER < MC_1_19_2
         return EventWrapper.of(Inner.SERVER, received -> (serverPlayer, filteredText, component) -> EventResult.map(received.received(serverPlayer, new Component() {
             @Override

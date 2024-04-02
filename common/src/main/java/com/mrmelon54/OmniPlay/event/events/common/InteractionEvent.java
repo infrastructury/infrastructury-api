@@ -17,12 +17,12 @@ public interface InteractionEvent {
     interface Inner extends remapped.architectury.event.events.common.InteractionEvent {
     }
 
-    Event<LeftClickBlock> LEFT_CLICK_BLOCK = EventWrapper.of(Inner.LEFT_CLICK_BLOCK, leftClickBlock -> ((player, interactionHand, blockPos, direction) -> EventResult.map(leftClickBlock.click(player, interactionHand, blockPos, direction))));
-    Event<RightClickBlock> RIGHT_CLICK_BLOCK = EventWrapper.of(Inner.RIGHT_CLICK_BLOCK, rightClickBlock -> ((player, interactionHand, blockPos, direction) -> EventResult.map(rightClickBlock.click(player, interactionHand, blockPos, direction))));
-    Event<RightClickItem> RIGHT_CLICK_ITEM = EventWrapper.of(Inner.RIGHT_CLICK_ITEM, rightClickItem -> ((player, interactionHand) -> CompoundEventResult.map(rightClickItem.click(player, interactionHand))));
+    Event<LeftClickBlock> LEFT_CLICK_BLOCK = EventWrapper.of(Inner.LEFT_CLICK_BLOCK, leftClickBlock -> ((player, interactionHand, blockPos, direction) -> EventResult.map2(leftClickBlock.click(player, interactionHand, blockPos, direction))));
+    Event<RightClickBlock> RIGHT_CLICK_BLOCK = EventWrapper.of(Inner.RIGHT_CLICK_BLOCK, rightClickBlock -> ((player, interactionHand, blockPos, direction) -> EventResult.map2(rightClickBlock.click(player, interactionHand, blockPos, direction))));
+    Event<RightClickItem> RIGHT_CLICK_ITEM = EventWrapper.of(Inner.RIGHT_CLICK_ITEM, rightClickItem -> ((player, interactionHand) -> CompoundEventResult.map2(rightClickItem.click(player, interactionHand))));
     Event<ClientLeftClickAir> CLIENT_LEFT_CLICK_AIR = EventWrapper.of(Inner.CLIENT_LEFT_CLICK_AIR, clientLeftClickAir -> clientLeftClickAir::click);
     Event<ClientRightClickAir> CLIENT_RIGHT_CLICK_AIR = EventWrapper.of(Inner.CLIENT_RIGHT_CLICK_AIR, clientRightClickAir -> clientRightClickAir::click);
-    Event<InteractEntity> INTERACT_ENTITY = EventWrapper.of(Inner.INTERACT_ENTITY, interactEntity -> ((player, entity, interactionHand) -> EventResult.map(interactEntity.interact(player, entity, interactionHand))));
+    Event<InteractEntity> INTERACT_ENTITY = EventWrapper.of(Inner.INTERACT_ENTITY, interactEntity -> ((player, entity, interactionHand) -> EventResult.map2(interactEntity.interact(player, entity, interactionHand))));
     Event<FarmlandTrample> FARMLAND_TRAMPLE = EventWrapper.of(Inner.FARMLAND_TRAMPLE, farmlandTrample -> ((level, blockPos, blockState, v, entity) -> EventResult.map(farmlandTrample.trample(level, blockPos, blockState, v, entity))));
 
     interface RightClickBlock {

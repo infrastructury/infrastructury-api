@@ -20,7 +20,7 @@ public class CommandPerformEvent {
 
     private static Actor<remapped.architectury.event.events.common.CommandPerformEvent> mapCommandPerformEvent(EventActor<CommandPerformEvent> commandPerformEventEventActor) {
         #if MC_VER == MC_1_16_5
-        return commandPerformEvent -> EventResult.map(commandPerformEventEventActor.act(new CommandPerformEvent(commandPerformEvent)));
+        return commandPerformEvent -> EventResult.map2(commandPerformEventEventActor.act(new CommandPerformEvent(commandPerformEvent)));
         #else
         return commandPerformEvent -> commandPerformEventEventActor.act(new CommandPerformEvent(commandPerformEvent));
         #endif

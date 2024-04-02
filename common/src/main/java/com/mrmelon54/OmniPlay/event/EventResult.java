@@ -2,6 +2,7 @@ package com.mrmelon54.OmniPlay.event;
 
 import net.minecraft.world.InteractionResult;
 import org.apache.commons.lang3.BooleanUtils;
+import remapped.architectury.event.events.common.EntityEvent;
 
 public final class EventResult {
     private static final EventResult TRUE = new EventResult(true, true);
@@ -10,18 +11,22 @@ public final class EventResult {
     private static final EventResult FALSE = new EventResult(true, false);
 
     #if MC_VER == MC_1_16_5
-    public static InteractionResult map(EventResult result) {
+    public static InteractionResult map2(EventResult result) {
         return result.asMinecraft();
     }
 
-    public static InteractionResult map(remapped.architectury.event.EventResult result) {
-        return map(EventResult.interrupt(result.value()));
+    public static InteractionResult map2(remapped.architectury.event.EventResult result) {
+        return EventResult.interrupt(result.value()).asMinecraft();
     }
     #else
+    public static remapped.architectury.event.EventResult map2(EventResult result) {
+        return map(result);
+    }
+    #endif
+
     public static remapped.architectury.event.EventResult map(EventResult result) {
         return remapped.architectury.event.EventResult.interrupt(result.interruptsFurtherEvaluation);
     }
-    #endif
 
     public static EventResult pass() {
         return PASS;

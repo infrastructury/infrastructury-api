@@ -19,7 +19,7 @@ public interface ClientChatEvent {
 
     static Event<Send> resolveSendEvent() {
         #if MC_VER < MC_1_19_2
-        return EventWrapper.of(ChatEvent.PROCESS, send -> s -> CompoundEventResult.map(CompoundEventResult.fromEventResult(send.send(s, null))));
+        return EventWrapper.of(ChatEvent.PROCESS, send -> s -> CompoundEventResult.map2(CompoundEventResult.fromEventResult(send.send(s, null))));
         #else
         return EventWrapper.of(ChatEvent.SEND, send -> (s, component) -> EventResult.map(send.send(s, component)));
         #endif
@@ -29,7 +29,7 @@ public interface ClientChatEvent {
 
     static Event<Received> resolveReceivedEvent() {
         #if MC_VER < MC_1_19_2
-        return EventWrapper.of(ChatEvent.RECEIVED, received -> (bound, component, uuid) -> CompoundEventResult.map(received.process(new ChatType$Bound(bound), component)));
+        return EventWrapper.of(ChatEvent.RECEIVED, received -> (bound, component, uuid) -> CompoundEventResult.map2(received.process(new ChatTypePolyfill(bound), component)));
         #else
         return EventWrapper.of(ChatEvent.RECEIVED, received -> (bound, component) -> CompoundEventResult.map(received.process(new ChatTypePolyfill(bound), component)));
         #endif

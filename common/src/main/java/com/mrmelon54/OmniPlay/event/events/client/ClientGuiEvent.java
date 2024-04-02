@@ -21,7 +21,7 @@ public interface ClientGuiEvent {
 
     static remapped.architectury.event.events.client.ClientGuiEvent.ScreenInitPre mapScreenInitPre(ScreenInitPre x) {
         #if MC_VER == MC_1_16_5
-        return (screen, a, b) -> EventResult.map(x.init(screen, () -> screen));
+        return (screen, a, b) -> EventResult.map2(x.init(screen, () -> screen));
         #else
         return (screen, screenAccess) -> EventResult.map(x.init(screen, screenAccess::getScreen));
         #endif
@@ -40,13 +40,13 @@ public interface ClientGuiEvent {
     Event<DebugText> DEBUG_TEXT_RIGHT = EventWrapper.of(Inner.DEBUG_TEXT_RIGHT, x -> x::gatherText);
     Event<ScreenInitPre> INIT_PRE = EventWrapper.of(Inner.INIT_PRE, ClientGuiEvent::mapScreenInitPre);
     Event<ScreenInitPost> INIT_POST = EventWrapper.of(Inner.INIT_POST, ClientGuiEvent::mapScreenInitPost);
-    Event<ScreenRenderPre> RENDER_PRE = EventWrapper.of(Inner.RENDER_PRE, x -> (screen, graphics, mouseX, mouseY, delta) -> EventResult.map(x.render(screen, Graphics.get(graphics), mouseX, mouseY, delta)));
+    Event<ScreenRenderPre> RENDER_PRE = EventWrapper.of(Inner.RENDER_PRE, x -> (screen, graphics, mouseX, mouseY, delta) -> EventResult.map2(x.render(screen, Graphics.get(graphics), mouseX, mouseY, delta)));
     Event<ScreenRenderPost> RENDER_POST = EventWrapper.of(Inner.RENDER_POST, x -> (screen, poseStack, i, i1, v) -> x.render(screen, Graphics.get(poseStack), i, i1, v));
     #if MC_VER > MC_1_17_1
     Event<ContainerScreenRenderBackground> RENDER_CONTAINER_BACKGROUND = EventWrapper.of(Inner.RENDER_CONTAINER_BACKGROUND, x -> (screen, graphics, mouseX, mouseY, delta) -> x.render(screen, Graphics.get(graphics), mouseX, mouseY, delta));
     Event<ContainerScreenRenderForeground> RENDER_CONTAINER_FOREGROUND = EventWrapper.of(Inner.RENDER_CONTAINER_FOREGROUND, x -> (screen, graphics, mouseX, mouseY, delta) -> x.render(screen, Graphics.get(graphics), mouseX, mouseY, delta));
     #endif
-    Event<SetScreen> SET_SCREEN = EventWrapper.of(Inner.SET_SCREEN, x -> screen -> CompoundEventResult.map(x.modifyScreen(screen)));
+    Event<SetScreen> SET_SCREEN = EventWrapper.of(Inner.SET_SCREEN, x -> screen -> CompoundEventResult.map2(x.modifyScreen(screen)));
 
     @Environment(EnvType.CLIENT)
     interface RenderHud {

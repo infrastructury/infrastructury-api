@@ -16,8 +16,8 @@ public interface BlockEvent {
     interface Inner extends remapped.architectury.event.events.common.BlockEvent {
     }
 
-    Event<Break> BREAK = EventWrapper.of(Inner.BREAK, aBreak -> (level, blockPos, blockState, serverPlayer, intValue) -> EventResult.map(aBreak.breakBlock(level, blockPos, blockState, serverPlayer, intValue)));
-    Event<Place> PLACE = EventWrapper.of(Inner.PLACE, place -> (level, blockPos, blockState, entity) -> EventResult.map(place.placeBlock(level, blockPos, blockState, entity)));
+    Event<Break> BREAK = EventWrapper.of(Inner.BREAK, aBreak -> (level, blockPos, blockState, serverPlayer, intValue) -> EventResult.map2(aBreak.breakBlock(level, blockPos, blockState, serverPlayer, intValue)));
+    Event<Place> PLACE = EventWrapper.of(Inner.PLACE, place -> (level, blockPos, blockState, entity) -> EventResult.map2(place.placeBlock(level, blockPos, blockState, entity)));
     Event<FallingLand> FALLING_LAND = EventWrapper.of(Inner.FALLING_LAND, fallingLand -> fallingLand::onLand);
 
     interface Break {

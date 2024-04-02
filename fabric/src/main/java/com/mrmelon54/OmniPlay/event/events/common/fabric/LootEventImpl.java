@@ -1,6 +1,6 @@
 package com.mrmelon54.OmniPlay.event.events.common.fabric;
 
-#if MC_VER < MC_1_18_2
+#if MC_VER > MC_1_16_5 && MC_VER < MC_1_18_2
 import com.mrmelon54.OmniPlay.event.events.common.LootEvent;
 import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
 import net.minecraft.world.level.storage.loot.LootDataManager;

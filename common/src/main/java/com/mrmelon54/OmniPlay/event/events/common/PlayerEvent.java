@@ -38,10 +38,10 @@ public interface PlayerEvent {
     Event<PlayerClone> PLAYER_CLONE = EventWrapper.of(Inner.PLAYER_CLONE, playerClone -> playerClone::clone);
     Event<CraftItem> CRAFT_ITEM = EventWrapper.of(Inner.CRAFT_ITEM, craftItem -> craftItem::craft);
     Event<SmeltItem> SMELT_ITEM = EventWrapper.of(Inner.SMELT_ITEM, smeltItem -> smeltItem::smelt);
-    Event<PickupItemPredicate> PICKUP_ITEM_PRE = EventWrapper.of(Inner.PICKUP_ITEM_PRE, pickupItemPredicate -> ((player, itemEntity, itemStack) -> EventResult.map(pickupItemPredicate.canPickup(player, itemEntity, itemStack))));
+    Event<PickupItemPredicate> PICKUP_ITEM_PRE = EventWrapper.of(Inner.PICKUP_ITEM_PRE, pickupItemPredicate -> ((player, itemEntity, itemStack) -> EventResult.map2(pickupItemPredicate.canPickup(player, itemEntity, itemStack))));
     Event<PickupItem> PICKUP_ITEM_POST = EventWrapper.of(Inner.PICKUP_ITEM_POST, pickupItem -> pickupItem::pickup);
     Event<ChangeDimension> CHANGE_DIMENSION = EventWrapper.of(Inner.CHANGE_DIMENSION, changeDimension -> changeDimension::change);
-    Event<DropItem> DROP_ITEM = EventWrapper.of(Inner.DROP_ITEM, dropItem -> ((player, itemEntity) -> EventResult.map(dropItem.drop(player, itemEntity))));
+    Event<DropItem> DROP_ITEM = EventWrapper.of(Inner.DROP_ITEM, dropItem -> ((player, itemEntity) -> EventResult.map2(dropItem.drop(player, itemEntity))));
     Event<OpenMenu> OPEN_MENU = EventWrapper.of(Inner.OPEN_MENU, openMenu -> openMenu::open);
     Event<CloseMenu> CLOSE_MENU = EventWrapper.of(Inner.CLOSE_MENU, closeMenu -> closeMenu::close);
     Event<FillBucket> FILL_BUCKET = EventWrapper.of(Inner.FILL_BUCKET, fillBucket -> ((player, level, itemStack, hitResult) -> CompoundEventResult.map(fillBucket.fill(player, level, itemStack, hitResult))));

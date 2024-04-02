@@ -31,9 +31,12 @@ c	me/shedaniel/architectury/event/events/ChunkEvent	remapped/architectury/event/
 c	me/shedaniel/architectury/event/events/client/ClientChatEvent$ClientReceived	remapped/architectury/event/events/client/ClientChatEvent$ClientReceived
 c	me/shedaniel/architectury/event/events/client/ClientChatEvent$Client	remapped/architectury/event/events/client/ClientChatEvent$Client
 c	me/shedaniel/architectury/event/events/client/ClientChatEvent	remapped/architectury/event/events/client/ClientChatEvent
+	f	Lme/shedaniel/architectury/event/Event;	CLIENT	PROCESS
+	f	Lme/shedaniel/architectury/event/Event;	CLIENT_RECEIVED	RECEIVED
 c	me/shedaniel/architectury/event/events/client/ClientLifecycleEvent$ClientState	remapped/architectury/event/events/client/ClientLifecycleEvent$ClientState
 c	me/shedaniel/architectury/event/events/client/ClientLifecycleEvent$ClientWorldState	remapped/architectury/event/events/client/ClientLifecycleEvent$ClientWorldState
 c	me/shedaniel/architectury/event/events/client/ClientLifecycleEvent	remapped/architectury/event/events/client/ClientLifecycleEvent
+	f	Lme/shedaniel/architectury/event/Event;	CLIENT_WORLD_LOAD	CLIENT_LEVEL_LOAD
 c	me/shedaniel/architectury/event/events/client/ClientPlayerEvent$ClientPlayerJoin	remapped/architectury/event/events/client/ClientPlayerEvent$ClientPlayerJoin
 c	me/shedaniel/architectury/event/events/client/ClientPlayerEvent$ClientPlayerQuit	remapped/architectury/event/events/client/ClientPlayerEvent$ClientPlayerQuit
 c	me/shedaniel/architectury/event/events/client/ClientPlayerEvent$ClientPlayerRespawn	remapped/architectury/event/events/client/ClientPlayerEvent$ClientPlayerRespawn
@@ -53,6 +56,8 @@ c	me/shedaniel/architectury/event/events/client/ClientScreenInputEvent	remapped/
 c	me/shedaniel/architectury/event/events/client/ClientTickEvent$Client	remapped/architectury/event/events/client/ClientTickEvent$Client
 c	me/shedaniel/architectury/event/events/client/ClientTickEvent$ClientWorld	remapped/architectury/event/events/client/ClientTickEvent$ClientWorld
 c	me/shedaniel/architectury/event/events/client/ClientTickEvent	remapped/architectury/event/events/client/ClientTickEvent
+	f	Lme/shedaniel/architectury/event/Event;	CLIENT_WORLD_PRE	CLIENT_LEVEL_PRE
+	f	Lme/shedaniel/architectury/event/Event;	CLIENT_WORLD_POST	CLIENT_LEVEL_POST
 c	me/shedaniel/architectury/event/events/CommandPerformEvent	remapped/architectury/event/events/common/CommandPerformEvent
 c	me/shedaniel/architectury/event/events/CommandRegistrationEvent	remapped/architectury/event/events/common/CommandRegistrationEvent
 c	me/shedaniel/architectury/event/events/EntityEvent$Add	remapped/architectury/event/events/common/EntityEvent$Add
@@ -89,6 +94,9 @@ c	me/shedaniel/architectury/event/events/LifecycleEvent$ServerState	remapped/arc
 c	me/shedaniel/architectury/event/events/LifecycleEvent$ServerWorldState	remapped/architectury/event/events/common/LifecycleEvent$ServerWorldState
 c	me/shedaniel/architectury/event/events/LifecycleEvent$WorldState	remapped/architectury/event/events/common/LifecycleEvent$WorldState
 c	me/shedaniel/architectury/event/events/LifecycleEvent	remapped/architectury/event/events/common/LifecycleEvent
+	f	Lme/shedaniel/architectury/event/Event;	SERVER_WORLD_LOAD	SERVER_LEVEL_LOAD
+	f	Lme/shedaniel/architectury/event/Event;	SERVER_WORLD_UNLOAD	SERVER_LEVEL_UNLOAD
+	f	Lme/shedaniel/architectury/event/Event;	SERVER_WORLD_SAVE	SERVER_LEVEL_SAVE
 c	me/shedaniel/architectury/event/events/LightningEvent$Strike	remapped/architectury/event/events/common/LightningEvent$Strike
 c	me/shedaniel/architectury/event/events/LightningEvent	remapped/architectury/event/events/common/LightningEvent
 c	me/shedaniel/architectury/event/events/PlayerEvent$BreakBlock	remapped/architectury/event/events/common/PlayerEvent$BreakBlock
@@ -116,6 +124,8 @@ c	me/shedaniel/architectury/event/events/TickEvent$Server	remapped/architectury/
 c	me/shedaniel/architectury/event/events/TickEvent$ServerWorld	remapped/architectury/event/events/common/TickEvent$ServerWorld
 c	me/shedaniel/architectury/event/events/TickEvent$WorldTick	remapped/architectury/event/events/common/TickEvent$WorldTick
 c	me/shedaniel/architectury/event/events/TickEvent	remapped/architectury/event/events/common/TickEvent
+	f	Lme/shedaniel/architectury/event/Event;	SERVER_WORLD_PRE	SERVER_LEVEL_PRE
+	f	Lme/shedaniel/architectury/event/Event;	SERVER_WORLD_POST	SERVER_LEVEL_POST
 c	me/shedaniel/architectury/event/events/TooltipEvent$AdditionalContexts	remapped/architectury/event/events/client/ClientTooltipEvent$AdditionalContexts
 c	me/shedaniel/architectury/event/events/TooltipEvent$ColorContext	remapped/architectury/event/events/client/ClientTooltipEvent$ColorContext
 c	me/shedaniel/architectury/event/events/TooltipEvent$Item	remapped/architectury/event/events/client/ClientTooltipEvent$Item

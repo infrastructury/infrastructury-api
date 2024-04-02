@@ -13,7 +13,7 @@ public interface ExplosionEvent {
     interface Inner extends remapped.architectury.event.events.common.ExplosionEvent {
     }
 
-    Event<Pre> PRE = EventWrapper.of(Inner.PRE, pre -> (level, explosion) -> EventResult.map(pre.explode(level, explosion)));
+    Event<Pre> PRE = EventWrapper.of(Inner.PRE, pre -> (level, explosion) -> EventResult.map2(pre.explode(level, explosion)));
     Event<Detonate> DETONATE = EventWrapper.of(Inner.DETONATE, detonate -> detonate::explode);
 
     interface Pre {
