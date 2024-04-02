@@ -5,7 +5,7 @@ import com.mrmelon54.OmniPlay.event.EventResult;
 import com.mrmelon54.OmniPlay.event.EventWrapper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.chat.ChatType$Bound;
+import net.minecraft.network.chat.ChatTypePolyfill;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 import remapped.architectury.event.Event;
@@ -31,7 +31,7 @@ public interface ClientChatEvent {
         #if MC_VER < MC_1_19_2
         return EventWrapper.of(ChatEvent.RECEIVED, received -> (bound, component, uuid) -> CompoundEventResult.map(received.process(new ChatType$Bound(bound), component)));
         #else
-        return EventWrapper.of(ChatEvent.RECEIVED, received -> (bound, component) -> CompoundEventResult.map(received.process(new ChatType$Bound(bound), component)));
+        return EventWrapper.of(ChatEvent.RECEIVED, received -> (bound, component) -> CompoundEventResult.map(received.process(new ChatTypePolyfill(bound), component)));
         #endif
     }
 
@@ -42,6 +42,6 @@ public interface ClientChatEvent {
 
     @Environment(EnvType.CLIENT)
     interface Received {
-        CompoundEventResult<Component> process(ChatType$Bound type, Component message);
+        CompoundEventResult<Component> process(ChatTypePolyfill type, Component message);
     }
 }
