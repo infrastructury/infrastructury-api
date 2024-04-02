@@ -1,5 +1,6 @@
 package net.minecraft.core;
 
+#if MC_VER < MC_1_20_1
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 
@@ -44,3 +45,4 @@ public interface HolderLookup<T> extends HolderGetter<T> {
         };
     }
 }
+#endif

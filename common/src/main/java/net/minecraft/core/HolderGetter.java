@@ -1,5 +1,6 @@
 package net.minecraft.core;
 
+#if MC_VER < MC_1_20_1
 import java.util.Optional;
 
 import net.minecraft.resources.ResourceKey;
@@ -18,3 +19,4 @@ public interface HolderGetter<T> {
         return (HolderSet.Named<T>) this.get(var1).orElseThrow(() -> new IllegalStateException("Missing tag " + var1));
     }
 }
+#endif
