@@ -78,4 +78,4 @@ for (loader in builds_for) {
     include(l)
 }
 
-rootProject.name = "omniplay"
+rootProject.name = "infrastructury"

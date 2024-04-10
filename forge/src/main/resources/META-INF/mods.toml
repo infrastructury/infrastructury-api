@@ -1,32 +1,32 @@
 modLoader = "javafml"
 loaderVersion = "*"
-issueTrackerURL = "https://github.com/mrmelon54/omniplay/issues"
+issueTrackerURL = "https://github.com/mrmelon54/infrastructury/issues"
 license = "GPL-3.0-only"
 
 [[mods]]
-modId = "omniplay"
+modId = "infrastructury"
 version = "${version}"
-displayName = "OmniPlay"
+displayName = "Infrastructury"
 authors = "MrMelon54"
 description = "${description}"
 logoFile = "icon.png"
-displayURL = "https://mrmelon54.com/minecraft/omniplay"
+displayURL = "https://mrmelon54.com/minecraft/infrastructury"
 
-[[dependencies.omniplay]]
+[[dependencies.infrastructury]]
 modId = "minecraft"
 mandatory = true
 versionRange = "${compatible_minecraft_versions}"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.omniplay]]
+[[dependencies.infrastructury]]
 modId = "architectury"
 mandatory = true
 versionRange = "[${architectury_version},)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.omniplay]]
+[[dependencies.infrastructury]]
 modId = "cloth_config"
 mandatory = true
 versionRange = "[${cloth_config_version},)"

@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "com.mrmelon54.infrastructury.mixin.fabric",
+  "minVersion": "0.8",
+  "client": [
+  ],
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

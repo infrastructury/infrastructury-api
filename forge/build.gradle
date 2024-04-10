@@ -14,8 +14,8 @@ loom {
         convertAccessWideners = true
         extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
 
-        mixinConfig "omniplay-common.mixins.json"
-        mixinConfig "omniplay.mixins.json"
+        mixinConfig "infrastructury-common.mixins.json"
+        mixinConfig "infrastructury.mixins.json"
     }
 }
 

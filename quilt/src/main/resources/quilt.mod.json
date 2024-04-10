@@ -1,23 +1,23 @@
 {
   "schema_version": 1,
   "mixin": [
-    "omniplay.mixins.json",
-    "omniplay-common.mixins.json"
+    "infrastructury.mixins.json",
+    "infrastructury-common.mixins.json"
   ],
   "quilt_loader": {
     "group": "${group}",
-    "id": "omniplay",
+    "id": "infrastructury",
     "version": "${version}",
     "metadata": {
-      "name": "OmniPlay",
+      "name": "Infrastructury",
       "description": "${description}",
       "contributors": {
         "MrMelon54": "Owner"
       },
       "contact": {
-        "homepage": "https://mrmelon54.com/minecraft/omniplay",
-        "sources": "https://github.com/mrmelon54/omniplay",
-        "issues": "https://github.com/mrmelon54/omniplay/issues"
+        "homepage": "https://mrmelon54.com/minecraft/infrastructury",
+        "sources": "https://github.com/mrmelon54/infrastructury",
+        "issues": "https://github.com/mrmelon54/infrastructury/issues"
       },
       "license": "GPL-3.0-only",
       "icon": "icon.png"
@@ -25,10 +25,10 @@
     "intermediate_mappings": "net.fabricmc:intermediary",
     "entrypoints": {
       "init": [
-        "com.mrmelon54.OmniPlay.quilt.OmniPlayQuilt"
+        "com.mrmelon54.infrastructury.quilt.InfrastructuryQuilt"
       ],
       "modmenu": [
-        "com.mrmelon54.OmniPlay.ModMenuIntegration"
+        "com.mrmelon54.infrastructury.ModMenuIntegration"
       ]
     },
     "depends": [

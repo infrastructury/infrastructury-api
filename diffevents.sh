@@ -90,7 +90,8 @@ function g() {
 for entry in "${entries[@]}"; do
   entry="${entry:18:6}"
   echo "=== Diff $entry ==="
+  echo "Entries with a left arrow are in Architectury but missing from Infrastructury"
   diff \
     <(g "../architectury-api/common/src/main/java/dev/architectury/event/events") \
-    <(g "./common/src/main/java/com/mrmelon54/OmniPlay/event/events" "$entry")
+    <(g "./common/src/main/java/com/mrmelon54/infrastructury/event/events" "$entry")
 done

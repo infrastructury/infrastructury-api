@@ -1,4 +1,4 @@
-# OmniPlay
+# Infrastructury
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/mrmelon54)
 
@@ -16,5 +16,5 @@
 
 ## Download
 
-- [CurseForge](https://www.curseforge.com/minecraft/mc-mods/omniplay)
-- [Modrinth](https://modrinth.com/mod/omniplay)
+- [CurseForge](https://www.curseforge.com/minecraft/mc-mods/infrastructury)
+- [Modrinth](https://modrinth.com/mod/infrastructury)

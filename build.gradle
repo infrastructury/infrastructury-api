@@ -268,7 +268,7 @@ allprojects {
 }
 
 forgix {
-    group = "com.mrmelon54.OmniPlay"
+    group = "com.mrmelon54.infrastructury"
     mergedJarName = rootProject.forgix_merged_jar
 
     if (findProject(":fabric"))
@@ -292,7 +292,7 @@ forgix {
             jarLocation = "build/libs/${project.archives_base_name}-neoforge-${rootProject.versionStr}.jar"
         }
 
-    removeDuplicate "com.mrmelon54.OmniPlay"
+    removeDuplicate "com.mrmelon54.infrastructury"
 }
 
 def getVersionMetadata() {
