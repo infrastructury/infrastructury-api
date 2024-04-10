@@ -83,3 +83,5 @@ jobs:
       - uses: actions/checkout@v4
       - name: Diff Events
         run: ./diffevents.sh
+        env:
+          GH_TOKEN: ${{ github.token }}
