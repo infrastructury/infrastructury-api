@@ -4,11 +4,19 @@ import com.mrmelon54.infrastructury.event.EventResult;
 import com.mrmelon54.infrastructury.event.EventWrapper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionResultHolder;
+
 import org.jetbrains.annotations.Nullable;
 import remapped.architectury.event.Event;
 
-#if MC_VER < MC_1_19_2
+#if MC_VER == MC_1_16_5
+import net.minecraft.world.InteractionResultHolder;
+#elif MC_VER < MC_1_19_2
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.util.FormattedCharSequence;
+import java.lang.String;
+import org.jetbrains.annotations.NotNull;
+import java.util.List;
 #endif
 
 public interface ChatEvent {
