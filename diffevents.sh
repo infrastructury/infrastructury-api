@@ -87,6 +87,10 @@ function g() {
   cd - || exit
 }
 
+if [ ! -d "../architectury-api" ]; then
+  gh repo clone architectury/architectury-api ../architectury-api
+fi
+
 for entry in "${entries[@]}"; do
   entry="${entry:18:6}"
   echo "=== Diff $entry ==="
