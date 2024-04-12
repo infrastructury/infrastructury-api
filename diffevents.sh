@@ -17,11 +17,13 @@ hashGet() {
 }
 
 MC_VER=0
+lastVer=""
 readarray -d '' entries < <(printf '%s\0' versionProperties/*.properties | sort -zV)
 for entry in "${entries[@]}"; do
-  ((++MC_VER))
   entry="${entry:18:6}"
+  lastVer="$entry"
   hashPut MC "$entry" "$MC_VER"
+  ((++MC_VER))
 done
 
 lastFile=""
@@ -89,6 +91,9 @@ function g() {
 
 if [ ! -d "../architectury-api" ]; then
   gh repo clone architectury/architectury-api ../architectury-api
+  cd ../architectury-api
+  git switch "$lastVer"
+  cd -
 fi
 
 for entry in "${entries[@]}"; do
