@@ -31,6 +31,6 @@ public class Infrastructury {
 
     @ExpectPlatform
     public static void registerConfigScreen(ConfigScreenRegistrar registrar) {
-        throw new AssertionError();
+        // Implemented by each platform
     }
 }
