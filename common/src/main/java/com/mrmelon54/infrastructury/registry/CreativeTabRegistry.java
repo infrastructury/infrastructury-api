@@ -50,37 +50,49 @@ public final class CreativeTabRegistry {
     }
 
     public static void appendBuiltin(CreativeModeTab tab, ItemLike... items) {
-        appendInternal(ofBuiltin(tab), Stream.of(items).map(CreativeTabRegistry::itemLikeToStack));
+        appendInternal(ofBuiltin(tab), Stream.of(items).map(ItemStack::new));
     }
 
-    public static void appendBuiltin(CreativeModeTab tab, Supplier<ItemLike>... items) {
-        appendInternal(ofBuiltin(tab), Stream.of(items).map(t -> CreativeTabRegistry.itemLikeToStack(t.get())));
+    public static void appendBuiltinStream(CreativeModeTab tab, Stream<ItemStack> items) {
+        appendInternal(ofBuiltin(tab), items);
+    }
+
+    public static void appendBuiltinSupply(CreativeModeTab tab, Stream<Supplier<ItemStack>> items) {
+        appendInternalSupply(ofBuiltin(tab), items);
     }
 
     public static void append(DeferredSupplier<CreativeModeTab> tab, ItemLike... items) {
-        appendInternal(tab, Stream.of(items).map(CreativeTabRegistry::itemLikeToStack));
+        appendInternal(tab, Stream.of(items).map(ItemStack::new));
     }
 
-    public static void append(DeferredSupplier<CreativeModeTab> tab, Supplier<ItemLike>... items) {
-        appendInternal(tab, Stream.of(items).map(t -> CreativeTabRegistry.itemLikeToStack(t.get())));
+    public static void appendStream(DeferredSupplier<CreativeModeTab> tab, Stream<ItemStack> items) {
+        appendInternal(tab, items);
+    }
+
+    public static void appendSupply(DeferredSupplier<CreativeModeTab> tab, Stream<Supplier<ItemStack>> items) {
+        appendInternalSupply(tab, items);
     }
 
     public static void append(ResourceKey<CreativeModeTab> tab, ItemLike... items) {
-        appendInternal(defer(tab), Stream.of(items).map(CreativeTabRegistry::itemLikeToStack));
+        appendInternal(defer(tab), Stream.of(items).map(ItemStack::new));
     }
 
-    public static void append(ResourceKey<CreativeModeTab> tab, Supplier<ItemLike>... items) {
-        appendInternal(defer(tab), Stream.of(items).map(t -> CreativeTabRegistry.itemLikeToStack(t.get())));
+    public static void appendStream(ResourceKey<CreativeModeTab> tab, Stream<ItemStack> items) {
+        appendInternal(defer(tab), items);
+    }
+
+    public static void appendSupply(ResourceKey<CreativeModeTab> tab, Stream<Supplier<ItemStack>> items) {
+        appendInternalSupply(defer(tab), items);
     }
 
     // internal calls
 
-    private static void appendInternal(DeferredSupplier<CreativeModeTab> tab, Stream<Supplier<ItemStack>> items) {
-        items.forEach(itemStackSupplier -> remapped.architectury.registry.CreativeTabRegistry.appendStack(tab.back(), itemStackSupplier));
+    private static void appendInternal(DeferredSupplier<CreativeModeTab> tab, Stream<ItemStack> items) {
+        appendInternalSupply(tab, items.map(itemStack -> () -> itemStack));
     }
 
-    private static <I extends ItemLike> Supplier<ItemStack> itemLikeToStack(I i) {
-        return () -> new ItemStack(i);
+    private static void appendInternalSupply(DeferredSupplier<CreativeModeTab> tab, Stream<Supplier<ItemStack>> items) {
+        items.forEach(itemStackSupplier -> remapped.architectury.registry.CreativeTabRegistry.appendStack(tab.back(), itemStackSupplier));
     }
 
     @FunctionalInterface
