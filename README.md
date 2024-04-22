@@ -9,6 +9,7 @@
 
 ## Info
 
+- Infrastructury is current still a work-in-progress and not yet intended for use.
 - This mod removes the boilerplate of multiplatform + multiversion modding.
 - All Architectury events are forwarded for every supported version.
 - New API features will be added to improve usability and remove boilerplate.

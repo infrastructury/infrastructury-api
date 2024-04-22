@@ -1,11 +1,11 @@
 package com.mrmelon54.infrastructury.event.events.common;
 
+import com.mrmelon54.infrastructury.event.Event;
 import com.mrmelon54.infrastructury.event.EventWrapper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import remapped.architectury.event.Event;
 
 import java.util.List;
 

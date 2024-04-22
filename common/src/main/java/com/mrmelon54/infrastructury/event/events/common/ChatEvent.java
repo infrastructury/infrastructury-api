@@ -1,12 +1,12 @@
 package com.mrmelon54.infrastructury.event.events.common;
 
+import com.mrmelon54.infrastructury.event.Event;
 import com.mrmelon54.infrastructury.event.EventResult;
 import com.mrmelon54.infrastructury.event.EventWrapper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import org.jetbrains.annotations.Nullable;
-import remapped.architectury.event.Event;
 
 #if MC_VER == MC_1_16_5
 import net.minecraft.world.InteractionResultHolder;

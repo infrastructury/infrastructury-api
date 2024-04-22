@@ -1,7 +1,7 @@
 package com.mrmelon54.infrastructury.event.events.common;
 
+import com.mrmelon54.infrastructury.event.Event;
 import com.mrmelon54.infrastructury.event.EventWrapper;
-import remapped.architectury.event.Event;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;

@@ -1,6 +1,7 @@
 package com.mrmelon54.infrastructury.event.events.common;
 
 import com.mrmelon54.infrastructury.event.CompoundEventResult;
+import com.mrmelon54.infrastructury.event.Event;
 import com.mrmelon54.infrastructury.event.EventResult;
 import com.mrmelon54.infrastructury.event.EventWrapper;
 import net.minecraft.core.BlockPos;
@@ -11,7 +12,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import remapped.architectury.event.Event;
 
 public interface InteractionEvent {
     interface Inner extends remapped.architectury.event.events.common.InteractionEvent {

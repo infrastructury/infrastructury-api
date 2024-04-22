@@ -1,11 +1,11 @@
 package com.mrmelon54.infrastructury.event.events.common;
 
+import com.mrmelon54.infrastructury.event.Event;
 import com.mrmelon54.infrastructury.event.EventWrapper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import org.jetbrains.annotations.Nullable;
-import remapped.architectury.event.Event;
 
 public interface ChunkEvent {
     interface Inner extends remapped.architectury.event.events.common.ChunkEvent {

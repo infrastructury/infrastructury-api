@@ -1,22 +1,20 @@
 package com.mrmelon54.infrastructury.event;
 
-import remapped.architectury.event.Event;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 public class EventWrapper<N, O> implements Event<N> {
-    private final Event<O> innerEvent;
+    private final remapped.architectury.event.Event<O> innerEvent;
     private final Function<N, O> converter;
     private final Map<N, O> map = new HashMap<>();
 
-    private EventWrapper(Event<O> innerEvent, Function<N, O> converter) {
+    private EventWrapper(remapped.architectury.event.Event<O> innerEvent, Function<N, O> converter) {
         this.innerEvent = innerEvent;
         this.converter = converter;
     }
 
-    public static <N, O> Event<N> of(Event<O> innerEvent, Function<N, O> converter) {
+    public static <N, O> Event<N> of(remapped.architectury.event.Event<O> innerEvent, Function<N, O> converter) {
         return new EventWrapper<>(innerEvent, converter);
     }
 

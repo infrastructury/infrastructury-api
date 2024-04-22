@@ -1,11 +1,11 @@
 package com.mrmelon54.infrastructury.event.events.common;
 
 import com.mojang.brigadier.ParseResults;
+import com.mrmelon54.infrastructury.event.Event;
 import com.mrmelon54.infrastructury.event.EventResult;
 import com.mrmelon54.infrastructury.event.EventWrapper;
 import net.minecraft.commands.CommandSourceStack;
 import org.jetbrains.annotations.Nullable;
-import remapped.architectury.event.Event;
 import remapped.architectury.event.EventActor;
 
 #if MC_VER == MC_1_16_5

@@ -1,5 +1,6 @@
 package com.mrmelon54.infrastructury.event.events.common;
 
+import com.mrmelon54.infrastructury.event.Event;
 import com.mrmelon54.infrastructury.event.EventResult;
 import com.mrmelon54.infrastructury.event.EventWrapper;
 import net.minecraft.world.damagesource.DamageSource;
@@ -12,7 +13,6 @@ import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import org.jetbrains.annotations.Nullable;
-import remapped.architectury.event.Event;
 
 public interface EntityEvent {
     interface Inner extends remapped.architectury.event.events.common.EntityEvent {

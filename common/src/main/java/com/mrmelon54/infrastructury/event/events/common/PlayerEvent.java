@@ -1,6 +1,7 @@
 package com.mrmelon54.infrastructury.event.events.common;
 
 import com.mrmelon54.infrastructury.event.CompoundEventResult;
+import com.mrmelon54.infrastructury.event.Event;
 import com.mrmelon54.infrastructury.event.EventResult;
 import com.mrmelon54.infrastructury.event.EventWrapper;
 import net.minecraft.advancements.AdvancementHolder;
@@ -17,7 +18,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
-import remapped.architectury.event.Event;
 
 public interface PlayerEvent {
     static remapped.architectury.event.events.common.PlayerEvent.PlayerAdvancement mapPlayerAdvancement(PlayerAdvancement playerAdvancement) {

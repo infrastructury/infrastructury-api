@@ -1,13 +1,13 @@
 package com.mrmelon54.infrastructury.event.events.common;
 
 #if MC_VER != MC_1_16_5
+import com.mrmelon54.infrastructury.event.Event;
 import com.mrmelon54.infrastructury.event.EventWrapper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootDataManager;
 import net.minecraft.world.level.storage.loot.LootPool;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
-import remapped.architectury.event.Event;
 
 #if MC_VER < MC_1_20_1
 import net.minecraft.world.level.storage.loot.LootTables;
