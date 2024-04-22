@@ -1,12 +1,12 @@
 package com.mrmelon54.infrastructury.event.events.client;
 
+import com.mrmelon54.infrastructury.event.Event;
 import com.mrmelon54.infrastructury.event.EventResult;
 import com.mrmelon54.infrastructury.event.EventWrapper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import remapped.architectury.event.Event;
 
 @Environment(EnvType.CLIENT)
 public interface ClientScreenInputEvent {

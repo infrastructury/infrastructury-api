@@ -1,6 +1,6 @@
 package com.mrmelon54.infrastructury;
 
-import com.mrmelon54.infrastructury.util.ConfigScreenRegistrar;
+import com.mrmelon54.infrastructury.utils.ConfigScreenRegistrar;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;

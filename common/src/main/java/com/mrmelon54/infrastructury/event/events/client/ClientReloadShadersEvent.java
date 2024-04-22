@@ -1,12 +1,12 @@
 package com.mrmelon54.infrastructury.event.events.client;
 
 #if MC_VER != MC_1_16_5
+import com.mrmelon54.infrastructury.event.Event;
 import com.mrmelon54.infrastructury.event.EventWrapper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.server.packs.resources.ResourceProvider;
-import remapped.architectury.event.Event;
 
 import java.util.function.Consumer;
 

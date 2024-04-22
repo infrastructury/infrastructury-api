@@ -1,6 +1,7 @@
 package com.mrmelon54.infrastructury.event.events.client;
 
 import com.mrmelon54.infrastructury.event.CompoundEventResult;
+import com.mrmelon54.infrastructury.event.Event;
 import com.mrmelon54.infrastructury.event.EventResult;
 import com.mrmelon54.infrastructury.event.EventWrapper;
 import net.fabricmc.api.EnvType;
@@ -8,7 +9,6 @@ import net.fabricmc.api.Environment;
 import net.minecraft.network.chat.ChatTypePolyfill;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
-import remapped.architectury.event.Event;
 
 @Environment(EnvType.CLIENT)
 public interface ClientChatEvent {

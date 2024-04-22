@@ -1,12 +1,12 @@
 package com.mrmelon54.infrastructury.event.events.client;
 
+import com.mrmelon54.infrastructury.event.Event;
 import com.mrmelon54.infrastructury.event.EventWrapper;
 import com.mrmelon54.infrastructury.event.events.common.LifecycleEvent;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import remapped.architectury.event.Event;
 
 @Environment(EnvType.CLIENT)
 public interface ClientLifecycleEvent {

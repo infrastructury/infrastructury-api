@@ -1,7 +1,7 @@
 package com.mrmelon54.infrastructury.event.events.client;
 
+import com.mrmelon54.infrastructury.event.Event;
 import com.mrmelon54.infrastructury.event.EventWrapper;
-import remapped.architectury.event.Event;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.player.LocalPlayer;

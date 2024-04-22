@@ -3,7 +3,6 @@ package com.mrmelon54.infrastructury.event;
 import net.minecraft.world.InteractionResultHolder;
 
 public class CompoundEventResult<T> {
-    private static final CompoundEventResult<?> PASS = new CompoundEventResult<>(EventResult.pass(), null);
     private final EventResult result;
     private final T object;
 
@@ -18,16 +17,16 @@ public class CompoundEventResult<T> {
     #endif
 
     public static <T> remapped.architectury.event.CompoundEventResult<T> map(CompoundEventResult<T> result) {
-        if (result.equals(PASS)) return remapped.architectury.event.CompoundEventResult.pass();
+        if (result.result == EventResult.pass()) return remapped.architectury.event.CompoundEventResult.pass();
         return remapped.architectury.event.CompoundEventResult.interrupt(result.result.value(), result.object);
     }
 
-    public static <T> com.mrmelon54.infrastructury.event.CompoundEventResult<T> fromEventResult(EventResult result) {
+    public static <T> CompoundEventResult<T> fromEventResult(EventResult result) {
         return CompoundEventResult.interrupt(result.value(), null);
     }
 
     public static <T> CompoundEventResult<T> pass() {
-        return (CompoundEventResult<T>) PASS;
+        return new CompoundEventResult<>(EventResult.pass(), null);
     }
 
     public static <T> CompoundEventResult<T> interrupt(Boolean value, T object) {

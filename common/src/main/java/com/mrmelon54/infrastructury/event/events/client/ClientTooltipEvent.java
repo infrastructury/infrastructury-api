@@ -1,8 +1,9 @@
 package com.mrmelon54.infrastructury.event.events.client;
 
+import com.mrmelon54.infrastructury.event.Event;
 import com.mrmelon54.infrastructury.event.EventResult;
 import com.mrmelon54.infrastructury.event.EventWrapper;
-import com.mrmelon54.infrastructury.util.Graphics;
+import com.mrmelon54.infrastructury.utils.Graphics;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphics;
@@ -12,7 +13,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
-import remapped.architectury.event.Event;
 
 import java.util.List;
 

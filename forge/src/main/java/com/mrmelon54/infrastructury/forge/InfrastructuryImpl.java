@@ -1,6 +1,6 @@
 package com.mrmelon54.infrastructury.forge;
 
-import com.mrmelon54.infrastructury.util.ConfigScreenRegistrar;
+import com.mrmelon54.infrastructury.utils.ConfigScreenRegistrar;
 import net.minecraftforge.fml.ModLoadingContext;
 
 #if MC_VER == MC_1_16_5
