@@ -11,6 +11,9 @@ import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 public final class BiomeModifications {
+    private BiomeModifications() {
+    }
+
     public static void addProperties(BiConsumer<BiomeContext, BiomeProperties.Mutable> modifier) {
         addProperties(Predicates.alwaysTrue(), modifier);
     }

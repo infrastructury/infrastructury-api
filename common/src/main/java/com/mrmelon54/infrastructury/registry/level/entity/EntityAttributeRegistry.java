@@ -7,6 +7,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import java.util.function.Supplier;
 
 public final class EntityAttributeRegistry {
+    private EntityAttributeRegistry() {
+    }
+
     public static void register(Supplier<? extends EntityType<? extends LivingEntity>> type, Supplier<AttributeSupplier.Builder> attribute) {
         remapped.architectury.registry.level.entity.EntityAttributeRegistry.register(type, attribute);
     }

@@ -8,7 +8,7 @@ import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import remapped.architectury.registry.CreativeTabOutput;
+import remapped.architectury.registry.CreativeTabOutput; // TODO: replace this
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;

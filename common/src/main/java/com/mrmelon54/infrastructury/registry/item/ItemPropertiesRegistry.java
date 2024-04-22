@@ -5,6 +5,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 
 public final class ItemPropertiesRegistry {
+    private ItemPropertiesRegistry() {
+    }
+
     public static ClampedItemPropertyFunction registerGeneric(ResourceLocation propertyId, ClampedItemPropertyFunction function) {
         return remapped.architectury.registry.item.ItemPropertiesRegistry.registerGeneric(propertyId, function);
     }

@@ -4,6 +4,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 
 public final class FuelRegistry {
+    private FuelRegistry() {
+    }
+
     public static void register(int time, ItemLike... items) {
         remapped.architectury.registry.fuel.FuelRegistry.register(time, items);
     }

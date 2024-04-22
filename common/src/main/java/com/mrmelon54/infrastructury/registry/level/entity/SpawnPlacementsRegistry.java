@@ -8,6 +8,9 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import java.util.function.Supplier;
 
 public final class SpawnPlacementsRegistry {
+    private SpawnPlacementsRegistry() {
+    }
+
     public static <T extends Mob> void register(Supplier<? extends EntityType<T>> type, SpawnPlacements.Type spawnPlacement, Heightmap.Types heightmapType, SpawnPlacements.SpawnPredicate<T> spawnPredicate) {
         remapped.architectury.registry.level.entity.SpawnPlacementsRegistry.register(type, spawnPlacement, heightmapType, spawnPredicate);
     }
