@@ -1,9 +1,9 @@
 package com.mrmelon54.infrastructury.registry.registries;
 
+import com.mrmelon54.infrastructury.utils.OptionalSupplier;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import remapped.architectury.utils.OptionalSupplier;
 
 public interface DeferredSupplier<T> extends OptionalSupplier<T> {
     static <T> DeferredSupplier<T> of(remapped.architectury.registry.registries.DeferredSupplier<T> supplier) {
