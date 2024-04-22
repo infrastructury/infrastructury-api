@@ -34,20 +34,6 @@ jobs:
           name: "buildAllJars-${{matrix.mc}}"
           path: buildAllJars/*.jar
           if-no-files-found: error
-
-  publish:
-    needs: resolve-versions
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJson(needs.resolve-versions.outputs.matrix) }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: "17"
-          distribution: "temurin"
       - name: Publish Release
         if: startsWith(github.ref, 'refs/tags/v')
         run: MAVEN_PASS="${{ secrets.MAVEN_PASS }}" MAVEN_TYPE=production ./gradlew publish -PmcVer="${{ matrix.mc }}" --no-daemon
