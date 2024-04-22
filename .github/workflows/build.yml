@@ -76,12 +76,3 @@ jobs:
           while read -r filename; do
             curl --fail -X POST -H "Authorization: Bearer ${{ secrets.DEPLOY }}" -F "upload=@$filename" https://api.mrmelon54.com/v1/mc-upload/upload/infrastructury
           done < <(find ./buildAllJars/ -name '*.jar' -type f)
-
-  diffevents:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Diff Events
-        run: './diffevents.sh || :'
-        env:
-          GH_TOKEN: ${{ github.token }}
