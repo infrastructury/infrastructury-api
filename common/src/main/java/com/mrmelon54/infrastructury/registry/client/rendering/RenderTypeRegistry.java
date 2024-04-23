@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 
 @Environment(EnvType.CLIENT)
-public class RenderTypeRegistry {
+public final class RenderTypeRegistry {
     private RenderTypeRegistry() {
     }
 

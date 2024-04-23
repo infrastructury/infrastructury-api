@@ -14,7 +14,6 @@ import remapped.architectury.event.Actor;
 
 public class CommandPerformEvent {
     static class Inner extends remapped.architectury.event.events.common.CommandPerformEvent {
-
         public Inner(ParseResults<CommandSourceStack> results, @Nullable Throwable throwable) {
             super(results, throwable);
         }

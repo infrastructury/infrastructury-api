@@ -15,25 +15,21 @@ public interface ClientChatEvent {
     interface ChatEvent extends remapped.architectury.event.events.client.ClientChatEvent {
     }
 
-    Event<Send> SEND = resolveSendEvent();
-
-    static Event<Send> resolveSendEvent() {
+    Event<Send> SEND = EventWrapper.of(ChatEvent.SEND, send -> {
         #if MC_VER < MC_1_19_2
-        return EventWrapper.of(ChatEvent.PROCESS, send -> s -> CompoundEventResult.map2(CompoundEventResult.fromEventResult(send.send(s, null))));
+        return s -> CompoundEventResult.map2(CompoundEventResult.fromEventResult(send.send(s, null)));
         #else
-        return EventWrapper.of(ChatEvent.SEND, send -> (s, component) -> EventResult.map(send.send(s, component)));
+        return (s, component) -> EventResult.map(send.send(s, component));
         #endif
-    }
+    });
 
-    Event<Received> RECEIVED = resolveReceivedEvent();
-
-    static Event<Received> resolveReceivedEvent() {
+    Event<Received> RECEIVED = EventWrapper.of(ChatEvent.RECEIVED, received -> {
         #if MC_VER < MC_1_19_2
-        return EventWrapper.of(ChatEvent.RECEIVED, received -> (bound, component, uuid) -> CompoundEventResult.map2(received.process(new ChatTypePolyfill(bound), component)));
+        return (bound, component, uuid) -> CompoundEventResult.map2(received.process(new ChatTypePolyfill(bound), component));
         #else
-        return EventWrapper.of(ChatEvent.RECEIVED, received -> (bound, component) -> CompoundEventResult.map(received.process(new ChatTypePolyfill(bound), component)));
+        return (bound, component) -> CompoundEventResult.map(received.process(new ChatTypePolyfill(bound), component));
         #endif
-    }
+    });
 
     @Environment(EnvType.CLIENT)
     interface Send {

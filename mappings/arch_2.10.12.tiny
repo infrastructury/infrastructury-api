@@ -16,9 +16,10 @@ c	dev/architectury/event/EventFactory	remapped/architectury/event/EventFactory
 c	dev/architectury/event/EventHandler	remapped/architectury/event/EventHandler
 c	dev/architectury/event/Event	remapped/architectury/event/Event
 c	dev/architectury/event/EventResult	remapped/architectury/event/EventResult
-c	dev/architectury/event/events/client/ClientChatEvent$Process	remapped/architectury/event/events/client/ClientChatEvent$Process
+c	dev/architectury/event/events/client/ClientChatEvent$Process	remapped/architectury/event/events/client/ClientChatEvent$Send
 c	dev/architectury/event/events/client/ClientChatEvent$Received	remapped/architectury/event/events/client/ClientChatEvent$Received
 c	dev/architectury/event/events/client/ClientChatEvent	remapped/architectury/event/events/client/ClientChatEvent
+    f   Lremapped/architectury/event/Event; PROCESS SEND
 c	dev/architectury/event/events/client/ClientGuiEvent$DebugText	remapped/architectury/event/events/client/ClientGuiEvent$DebugText
 c	dev/architectury/event/events/client/ClientGuiEvent$RenderHud	remapped/architectury/event/events/client/ClientGuiEvent$RenderHud
 c	dev/architectury/event/events/client/ClientGuiEvent$ScreenInitPost	remapped/architectury/event/events/client/ClientGuiEvent$ScreenInitPost

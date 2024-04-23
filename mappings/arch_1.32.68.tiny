@@ -31,7 +31,7 @@ c	me/shedaniel/architectury/event/events/ChunkEvent	remapped/architectury/event/
 c	me/shedaniel/architectury/event/events/client/ClientChatEvent$ClientReceived	remapped/architectury/event/events/client/ClientChatEvent$ClientReceived
 c	me/shedaniel/architectury/event/events/client/ClientChatEvent$Client	remapped/architectury/event/events/client/ClientChatEvent$Client
 c	me/shedaniel/architectury/event/events/client/ClientChatEvent	remapped/architectury/event/events/client/ClientChatEvent
-	f	Lme/shedaniel/architectury/event/Event;	CLIENT	PROCESS
+	f	Lme/shedaniel/architectury/event/Event;	CLIENT	SEND
 	f	Lme/shedaniel/architectury/event/Event;	CLIENT_RECEIVED	RECEIVED
 c	me/shedaniel/architectury/event/events/client/ClientLifecycleEvent$ClientState	remapped/architectury/event/events/client/ClientLifecycleEvent$ClientState
 c	me/shedaniel/architectury/event/events/client/ClientLifecycleEvent$ClientWorldState	remapped/architectury/event/events/client/ClientLifecycleEvent$ClientWorldState

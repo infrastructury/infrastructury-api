@@ -3,6 +3,7 @@ package com.mrmelon54.infrastructury.event.events.common;
 import com.mrmelon54.infrastructury.event.Event;
 import com.mrmelon54.infrastructury.event.EventResult;
 import com.mrmelon54.infrastructury.event.EventWrapper;
+import com.mrmelon54.infrastructury.event.PartialEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -23,22 +24,25 @@ public interface ChatEvent {
     interface Inner extends remapped.architectury.event.events.common.ChatEvent {
     }
 
-    #if MC_VER > MC_1_18_2
-    Event<Decorate> DECORATE = EventWrapper.of(Inner.DECORATE, decorate -> (serverPlayer, chatComponent) -> decorate.decorate(serverPlayer, new ChatComponent() {
-        @Override
-        public Component get() {
-            return chatComponent.get();
-        }
+    PartialEvent<Decorate> DECORATE = EventWrapper.partial(() -> {
+        #if MC_VER > MC_1_18_2
+        return EventWrapper.of(Inner.DECORATE, decorate -> ((serverPlayer, chatComponent) -> decorate.decorate(serverPlayer, new ChatComponent() {
+            @Override
+            public Component get() {
+                return chatComponent.get();
+            }
 
-        @Override
-        public void set(Component component) {
-            chatComponent.set(component);
-        }
-    }));
-    #endif
-    Event<Received> RECEIVED = resolveReceivedEvent();
+            @Override
+            public void set(Component component) {
+                chatComponent.set(component);
+            }
+        })));
+        #else
+        return null;
+        #endif
+    });
 
-    static Event<Received> resolveReceivedEvent() {
+    Event<Received> RECEIVED = EventWrapper.partial(() -> {
         #if MC_VER == MC_1_16_5
         return EventWrapper.of(Inner.SERVER, received -> (serverPlayer, s, component) -> new InteractionResultHolder<>(EventResult.map2(received.received(serverPlayer, component)), component));
         #elif MC_VER < MC_1_19_2
@@ -76,7 +80,7 @@ public interface ChatEvent {
         #else
         return EventWrapper.of(Inner.RECEIVED, received -> (serverPlayer, component) -> EventResult.map(received.received(serverPlayer, component)));
         #endif
-    }
+    });
 
     @FunctionalInterface
     interface Decorate {

@@ -34,7 +34,8 @@ public interface ClientTooltipEvent {
     interface Inner extends remapped.architectury.event.events.client.ClientTooltipEvent {
     }
 
-    static Event<Render> resolveRenderPre() {
+    Event<Item> ITEM = EventWrapper.of(Inner.ITEM, item -> item::append);
+    Event<Render> RENDER_PRE = EventWrapper.select(() -> {
         #if MC_VER <= MC_1_17_1
         return new Event<Render>() {
             @Override
@@ -86,10 +87,7 @@ public interface ClientTooltipEvent {
         #else
         return EventWrapper.of(Inner.RENDER_PRE, render -> ((guiGraphics, list, i, i1) -> EventResult.map(render.renderTooltip(Graphics.get(guiGraphics), list, i, i1))));
         #endif
-    }
-
-    Event<Item> ITEM = EventWrapper.of(Inner.ITEM, item -> item::append);
-    Event<Render> RENDER_PRE = resolveRenderPre();
+    });
 
     Event<RenderModifyPosition> RENDER_MODIFY_POSITION = EventWrapper.of(Inner.RENDER_MODIFY_POSITION, renderModifyPosition -> ((guiGraphics, positionContext) -> renderModifyPosition.renderTooltip(Graphics.get(guiGraphics), new PositionContext() {
         @Override

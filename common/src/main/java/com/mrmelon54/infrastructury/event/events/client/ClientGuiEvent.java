@@ -1,9 +1,6 @@
 package com.mrmelon54.infrastructury.event.events.client;
 
-import com.mrmelon54.infrastructury.event.CompoundEventResult;
-import com.mrmelon54.infrastructury.event.Event;
-import com.mrmelon54.infrastructury.event.EventResult;
-import com.mrmelon54.infrastructury.event.EventWrapper;
+import com.mrmelon54.infrastructury.event.*;
 import com.mrmelon54.infrastructury.hooks.client.screen.ScreenAccess;
 import com.mrmelon54.infrastructury.utils.Graphics;
 import net.fabricmc.api.EnvType;
@@ -13,6 +10,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 
 import java.util.List;
+import java.util.function.Function;
 
 @Environment(EnvType.CLIENT)
 public interface ClientGuiEvent {
@@ -42,10 +40,20 @@ public interface ClientGuiEvent {
     Event<ScreenInitPost> INIT_POST = EventWrapper.of(Inner.INIT_POST, ClientGuiEvent::mapScreenInitPost);
     Event<ScreenRenderPre> RENDER_PRE = EventWrapper.of(Inner.RENDER_PRE, x -> (screen, graphics, mouseX, mouseY, delta) -> EventResult.map2(x.render(screen, Graphics.get(graphics), mouseX, mouseY, delta)));
     Event<ScreenRenderPost> RENDER_POST = EventWrapper.of(Inner.RENDER_POST, x -> (screen, poseStack, i, i1, v) -> x.render(screen, Graphics.get(poseStack), i, i1, v));
-    #if MC_VER > MC_1_17_1
-    Event<ContainerScreenRenderBackground> RENDER_CONTAINER_BACKGROUND = EventWrapper.of(Inner.RENDER_CONTAINER_BACKGROUND, x -> (screen, graphics, mouseX, mouseY, delta) -> x.render(screen, Graphics.get(graphics), mouseX, mouseY, delta));
-    Event<ContainerScreenRenderForeground> RENDER_CONTAINER_FOREGROUND = EventWrapper.of(Inner.RENDER_CONTAINER_FOREGROUND, x -> (screen, graphics, mouseX, mouseY, delta) -> x.render(screen, Graphics.get(graphics), mouseX, mouseY, delta));
-    #endif
+    PartialEvent<ContainerScreenRenderBackground> RENDER_CONTAINER_BACKGROUND = EventWrapper.partial(() -> {
+        #if MC_VER > MC_1_17_1
+        return EventWrapper.of(Inner.RENDER_CONTAINER_BACKGROUND, x -> (abstractContainerScreen, guiGraphics, i, i1, v) -> x.render(abstractContainerScreen, Graphics.get(guiGraphics), i, i1, v));
+        #else
+        return null;
+        #endif
+    });
+    PartialEvent<ContainerScreenRenderForeground> RENDER_CONTAINER_FOREGROUND = EventWrapper.partial(() -> {
+        #if MC_VER > MC_1_17_1
+        return EventWrapper.of(Inner.RENDER_CONTAINER_FOREGROUND, x -> (screen, graphics, mouseX, mouseY, delta) -> x.render(screen, Graphics.get(graphics), mouseX, mouseY, delta));
+        #else
+        return null;
+        #endif
+    });
     Event<SetScreen> SET_SCREEN = EventWrapper.of(Inner.SET_SCREEN, x -> screen -> CompoundEventResult.map2(x.modifyScreen(screen)));
 
     @Environment(EnvType.CLIENT)

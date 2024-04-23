@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public interface DeferredSupplier<T> extends OptionalSupplier<T> {
     static <T> DeferredSupplier<T> of(remapped.architectury.registry.registries.DeferredSupplier<T> supplier) {
-        return new DeferredSupplier<T>() {
+        return new DeferredSupplier<>() {
             @Override
             public T get() {
                 return supplier.get();

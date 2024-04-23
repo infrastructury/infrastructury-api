@@ -1,5 +1,7 @@
 package com.mrmelon54.infrastructury.event.events.common;
 
+// TODO: convert to partial event
+
 #if MC_VER > MC_1_18_2
 import com.mojang.brigadier.CommandDispatcher;
 import com.mrmelon54.infrastructury.event.Event;
@@ -13,15 +15,13 @@ public interface CommandRegistrationEvent {
 
     }
 
-    static remapped.architectury.event.events.common.CommandRegistrationEvent mapCommandRegistrationEvent(CommandRegistrationEvent commandRegistrationEvent) {
+    Event<CommandRegistrationEvent> EVENT = EventWrapper.of(Inner.EVENT, x -> {
         #if MC_VER < MC_1_19_2
-        return ((commandDispatcher, commandSelection) -> commandRegistrationEvent.register(commandDispatcher, null, commandSelection));
+        return ((commandDispatcher, commandSelection) -> x.register(commandDispatcher, null, commandSelection));
         #else
-        return commandRegistrationEvent::register;
+        return x::register;
         #endif
-    }
-
-    Event<CommandRegistrationEvent> EVENT = EventWrapper.of(Inner.EVENT, CommandRegistrationEvent::mapCommandRegistrationEvent);
+    });
 
     void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext registry, Commands.CommandSelection selection);
 }
