@@ -25,7 +25,7 @@ public final class NetworkManager {
     }
 
     public static void registerReceiver(Side side, ResourceLocation id, List<PacketTransformer> packetTransformers, NetworkReceiver receiver) {
-        remapped.architectury.networking.NetworkManager.registerReceiver(side.side, id, packetTransformers.stream().map(x -> x.convert()).toList(), receiver::receive);
+        remapped.architectury.networking.NetworkManager.registerReceiver(side.side, id, packetTransformers.stream().map(x -> x.convert()).toList(), (friendlyByteBuf, packetContext) -> receiver.receive(friendlyByteBuf, PacketContext.convert(packetContext)));
     }
 
     public static void collectPackets(PacketSink sink, Side side, ResourceLocation id, FriendlyByteBuf buf) {
@@ -87,7 +87,7 @@ public final class NetworkManager {
 
     @FunctionalInterface
     public interface NetworkReceiver {
-        void receive(FriendlyByteBuf var1, remapped.architectury.networking.NetworkManager.PacketContext var2);
+        void receive(FriendlyByteBuf var1, NetworkManager.PacketContext var2);
     }
 
     public interface PacketContext {

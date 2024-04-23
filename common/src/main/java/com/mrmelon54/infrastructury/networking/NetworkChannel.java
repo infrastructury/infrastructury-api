@@ -1,6 +1,5 @@
 package com.mrmelon54.infrastructury.networking;
 
-import com.google.common.collect.Maps;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.network.FriendlyByteBuf;
@@ -8,14 +7,12 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
-import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 public final class NetworkChannel {
     private final remapped.architectury.networking.NetworkChannel channel;
-    private final Map<Class<?>, MessageInfo<?>> encoders = Maps.newHashMap();
 
     private NetworkChannel(remapped.architectury.networking.NetworkChannel channel) {
         this.channel = channel;
@@ -57,8 +54,5 @@ public final class NetworkChannel {
 
     public <T> boolean canPlayerReceive(ServerPlayer player, Class<T> type) {
         return channel.canPlayerReceive(player, type);
-    }
-
-    private record MessageInfo<T>(ResourceLocation packetId, BiConsumer<T, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, T> decoder, BiConsumer<T, Supplier<NetworkManager.PacketContext>> messageConsumer) {
     }
 }

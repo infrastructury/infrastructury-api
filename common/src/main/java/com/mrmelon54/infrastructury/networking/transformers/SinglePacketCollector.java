@@ -20,4 +20,8 @@ public class SinglePacketCollector implements PacketSink {
         this.packet = packet;
         if (this.consumer != null) this.consumer.accept(packet);
     }
+
+    public Packet<?> getPacket() {
+        return packet;
+    }
 }

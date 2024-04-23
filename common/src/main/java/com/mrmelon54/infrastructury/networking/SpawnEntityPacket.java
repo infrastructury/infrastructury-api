@@ -19,7 +19,7 @@ public class SpawnEntityPacket {
     public static class Client {
         @Environment(EnvType.CLIENT)
         public static void register() {
-            NetworkManager.registerReceiver(NetworkManager.Side.S2C, PACKET_ID, (buf, packetContext) -> receive(buf, NetworkManager.PacketContext.convert(packetContext)));
+            NetworkManager.registerReceiver(NetworkManager.Side.S2C, PACKET_ID, Client::receive);
         }
 
         @Environment(EnvType.CLIENT)
