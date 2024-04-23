@@ -1,6 +1,11 @@
 package com.mrmelon54.infrastructury.registry.menu;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
@@ -27,6 +32,17 @@ public final class MenuRegistry {
 
     public static <T extends AbstractContainerMenu> MenuType<T> ofExtended(ExtendedMenuTypeFactory<T> factory) {
         return remapped.architectury.registry.menu.MenuRegistry.ofExtended(factory::create);
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static <H extends AbstractContainerMenu, S extends Screen & MenuAccess<H>> void registerScreenFactory(MenuType<? extends H> type, ScreenFactory<H, S> factory) {
+        remapped.architectury.registry.menu.MenuRegistry.registerScreenFactory(type, factory::create);
+    }
+
+    @Environment(EnvType.CLIENT)
+    @FunctionalInterface
+    public interface ScreenFactory<H extends AbstractContainerMenu, S extends Screen & MenuAccess<H>> {
+        S create(H containerMenu, Inventory inventory, Component component);
     }
 
     @FunctionalInterface
