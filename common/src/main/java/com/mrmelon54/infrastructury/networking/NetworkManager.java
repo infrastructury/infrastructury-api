@@ -1,7 +1,9 @@
 package com.mrmelon54.infrastructury.networking;
 
+import com.mrmelon54.infrastructury.networking.transformers.PacketCollector;
 import com.mrmelon54.infrastructury.networking.transformers.PacketSink;
 import com.mrmelon54.infrastructury.networking.transformers.PacketTransformer;
+import com.mrmelon54.infrastructury.networking.transformers.SinglePacketCollector;
 import com.mrmelon54.infrastructury.utils.Env;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -18,6 +20,20 @@ import java.util.List;
 
 public final class NetworkManager {
     private NetworkManager() {
+    }
+
+    @Deprecated
+    public static Packet<?> toPacket(Side side, ResourceLocation id, FriendlyByteBuf buf) {
+        SinglePacketCollector sink = new SinglePacketCollector(null);
+        NetworkManager.collectPackets(sink, side, id, buf);
+        return sink.getPacket();
+    }
+
+    @Deprecated
+    public static List<Packet<?>> toPackets(Side side, ResourceLocation id, FriendlyByteBuf buf) {
+        PacketCollector sink = new PacketCollector(null);
+        collectPackets(sink, side, id, buf);
+        return sink.collect();
     }
 
     public static void registerReceiver(Side side, ResourceLocation id, NetworkReceiver receiver) {

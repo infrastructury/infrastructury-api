@@ -6,6 +6,7 @@ import net.minecraft.core.HolderOwner;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import remapped.architectury.impl.RegistrySupplierImpl;
 import remapped.architectury.registry.registries.Registrar;
@@ -90,17 +91,17 @@ public interface RegistrySupplier<T> extends DeferredSupplier<T>, Holder<T> {
             }
 
             @Override
-            public Either<ResourceKey<T>, T> unwrap() {
+            public @NotNull Either<ResourceKey<T>, T> unwrap() {
                 return supplier.unwrap();
             }
 
             @Override
-            public Optional<ResourceKey<T>> unwrapKey() {
+            public @NotNull Optional<ResourceKey<T>> unwrapKey() {
                 return supplier.unwrapKey();
             }
 
             @Override
-            public Kind kind() {
+            public @NotNull Kind kind() {
                 return supplier.kind();
             }
 
