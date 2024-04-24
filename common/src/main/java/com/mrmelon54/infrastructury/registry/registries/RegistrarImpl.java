@@ -83,7 +83,11 @@ public class RegistrarImpl<T> implements Registrar<T> {
 
     @Override
     public @Nullable Holder<T> getHolder(ResourceKey<T> key) {
+        #if MC_VER > MC_1_20_1
         return r.getHolder(key);
+        #else
+        return new Holder.Direct<>(r.delegate(key.location()).get());
+        #endif
     }
 
     @Override

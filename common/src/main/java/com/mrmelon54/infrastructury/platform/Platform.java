@@ -23,11 +23,19 @@ public final class Platform {
     }
 
     public static boolean isMinecraftForge() {
+        #if MC_VER > MC_1_20_1
         return remapped.architectury.platform.Platform.isMinecraftForge();
+        #else
+        return remapped.architectury.platform.Platform.isForge();
+        #endif
     }
 
     public static boolean isNeoForge() {
+        #if MC_VER > MC_1_20_1
         return remapped.architectury.platform.Platform.isNeoForge();
+        #else
+        return false;
+        #endif
     }
 
     public static String getMinecraftVersion() {
