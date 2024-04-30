@@ -1,8 +1,10 @@
 package com.mrmelon54.infrastructury.registry.registries;
 
 import com.mojang.datafixers.util.Either;
+import com.mrmelon54.infrastructury.utils.OptionalSupplier;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderOwner;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -13,9 +15,10 @@ import remapped.architectury.registry.registries.RegistrarManager;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public interface RegistrySupplier<T> extends DeferredSupplier<T>, Holder<T> {
+public interface RegistrySupplier<T> extends OptionalSupplier<T>, Holder<T> {
     static <T> RegistrySupplier<T> of(remapped.architectury.registry.registries.RegistrySupplier<T> supplier) {
         return new RegistrySupplier<>() {
             @Override
@@ -54,7 +57,7 @@ public interface RegistrySupplier<T> extends DeferredSupplier<T>, Holder<T> {
             }
 
             @Override
-            public T value() {
+            public @NotNull T value() {
                 #if MC_VER > MC_1_20_2
                 return supplier.value();
                 #else
@@ -159,6 +162,18 @@ public interface RegistrySupplier<T> extends DeferredSupplier<T>, Holder<T> {
     RegistrarManager getRegistrarManager();
 
     Registrar<T> getRegistrar();
+
+    ResourceLocation getRegistryId();
+
+    default ResourceKey<Registry<T>> getRegistryKey() {
+        return ResourceKey.createRegistryKey(this.getRegistryId());
+    }
+
+    ResourceLocation getId();
+
+    default ResourceKey<T> getKey() {
+        return ResourceKey.create(this.getRegistryKey(), this.getId());
+    }
 
     default void listen(Consumer<T> callback) {
         this.getRegistrar().listen(architectury$convert(), callback);
