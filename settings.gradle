@@ -78,4 +78,4 @@ for (loader in builds_for) {
     include(l)
 }
 
-rootProject.name = "infrastructury"
+rootProject.name = "infrastructury-api"
