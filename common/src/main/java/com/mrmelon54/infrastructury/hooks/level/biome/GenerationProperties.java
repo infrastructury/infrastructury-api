@@ -1,22 +1,17 @@
 package com.mrmelon54.infrastructury.hooks.level.biome;
 
-import com.mojang.datafixers.util.Either;
-import com.mojang.serialization.Dynamic;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
+
+#if MC_VER == MC_1_19_2
+import net.minecraft.data.BuiltinRegistries;
+#endif
 
 public interface GenerationProperties {
     remapped.architectury.hooks.level.biome.GenerationProperties architectury$convert();
