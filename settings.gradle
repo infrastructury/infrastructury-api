@@ -26,7 +26,7 @@ def loadProperties() {
 
     File mcVerPropsFile = file("mcver.properties")
     if (!mcVerPropsFile.exists()) {
-        mcVerPropsFile.text = "# Modify this property to edit the local Minecraft version to use when compiling\nmcVer=" + defaultMcVersion + "\n"
+        mcVerPropsFile.text = "# Modify this property to edit the local Minecraft version to use when compiling\nmcVer=unknown\n"
     }
 
     println "Avalible MC versions: ${mcVers}"
