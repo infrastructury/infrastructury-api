@@ -1,5 +1,6 @@
 package com.mrmelon54.infrastructury.hooks.level.biome;
 
+#if MC_VER >= MC_1_18_2
 public interface BiomeProperties {
     remapped.architectury.hooks.level.biome.BiomeProperties architectury$convert();
 
@@ -81,3 +82,4 @@ public interface BiomeProperties {
         };
     }
 }
+#endif

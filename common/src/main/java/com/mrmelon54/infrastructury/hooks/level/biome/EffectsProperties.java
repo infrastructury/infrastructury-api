@@ -1,5 +1,6 @@
 package com.mrmelon54.infrastructury.hooks.level.biome;
 
+#if MC_VER >= MC_1_18_2
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.Music;
 import net.minecraft.sounds.SoundEvent;
@@ -290,3 +291,4 @@ public interface EffectsProperties {
         };
     }
 }
+#endif

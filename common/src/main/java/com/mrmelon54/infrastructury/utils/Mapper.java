@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 public final class Mapper {
     public static <N, O> Iterable<N> map(Iterable<O> iterable, Function<O, N> mapper) {
-        return new Iterable<>() {
+        return new Iterable<N>() {
             @NotNull
             @Override
             public Iterator<N> iterator() {
@@ -17,7 +17,7 @@ public final class Mapper {
     }
 
     public static <N, O> Iterator<N> map(Iterator<O> iterator, Function<O, N> mapper) {
-        return new Iterator<>() {
+        return new Iterator<N>() {
             @Override
             public boolean hasNext() {
                 return iterator.hasNext();

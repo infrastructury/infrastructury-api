@@ -1,5 +1,6 @@
 package com.mrmelon54.infrastructury.hooks.level.biome;
 
+#if MC_VER >= MC_1_18_2
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.MobSpawnSettings;
@@ -117,3 +118,4 @@ public interface SpawnProperties {
         };
     }
 }
+#endif

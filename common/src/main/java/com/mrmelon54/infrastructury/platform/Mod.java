@@ -79,7 +79,11 @@ public interface Mod {
 
             @Override
             public Optional<Path> findResource(String... path) {
+                #if MC_VER <= MC_1_18_2
+                return Optional.empty();
+                #else
                 return mod.findResource(path);
+                #endif
             }
 
             @Override

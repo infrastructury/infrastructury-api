@@ -1,5 +1,6 @@
 package com.mrmelon54.infrastructury.hooks.level.biome;
 
+#if MC_VER >= MC_1_18_2
 import net.minecraft.world.level.biome.Biome;
 
 public interface ClimateProperties {
@@ -119,3 +120,4 @@ public interface ClimateProperties {
         };
     }
 }
+#endif

@@ -4,7 +4,7 @@ package com.mrmelon54.infrastructury.event;
 // eventExists() returns true if the Event functions on the current version.
 public interface PartialEvent<T> extends Event<T> {
     static <T> PartialEvent<T> of(Event<T> event) {
-        return event == null ? new PartialEvent<>() {
+        return event == null ? new PartialEvent<T>() {
             @Override
             public boolean eventExists() {
                 return false;
@@ -31,7 +31,7 @@ public interface PartialEvent<T> extends Event<T> {
             @Override
             public void clearListeners() {
             }
-        } : new PartialEvent<>() {
+        } : new PartialEvent<T>() {
             @Override
             public boolean eventExists() {
                 return true;

@@ -1,7 +1,5 @@
 package com.mrmelon54.infrastructury.event;
 
-import com.mrmelon54.infrastructury.utils.OptionalSupplier;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +17,7 @@ public class EventWrapper<N, O> implements Event<N> {
     }
 
     private static <N> Event<N> empty(Class<N> clazz) {
-        return new Event<>() {
+        return new Event<N>() {
             @Override
             public N invoker() {
                 try {

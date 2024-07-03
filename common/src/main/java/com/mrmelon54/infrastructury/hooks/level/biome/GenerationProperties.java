@@ -1,5 +1,6 @@
 package com.mrmelon54.infrastructury.hooks.level.biome;
 
+#if MC_VER >= MC_1_18_2
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.levelgen.GenerationStep;
@@ -132,3 +133,4 @@ public interface GenerationProperties {
         };
     }
 }
+#endif

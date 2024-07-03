@@ -7,8 +7,9 @@ import com.mrmelon54.infrastructury.utils.Graphics;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.util.FormattedCharSink;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import org.jetbrains.annotations.ApiStatus;
@@ -20,8 +21,14 @@ import java.util.List;
 import remapped.architectury.impl.TooltipAdditionalContextsImpl;
 #endif
 
+#if MC_VER != MC_1_16_5
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+#endif
+
 #if MC_VER <= MC_1_17_1
+#if MC_VER > MC_1_16_5
 import net.minecraft.client.gui.Font;
+#endif
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.util.FormattedCharSequence;
 
@@ -45,6 +52,20 @@ public interface ClientTooltipEvent {
 
             @Override
             public void register(Render render) {
+                #if MC_VER == MC_1_16_5
+                Inner.RENDER_VANILLA_PRE.register((poseStack, list, i, i1) -> EventResult.map2(render.renderTooltip(Graphics.get(poseStack), list.stream().map((Function<FormattedCharSequence, Render.ClientTooltipComponent>) formattedCharSequence -> new Render.ClientTooltipComponent() {
+                    @Override
+                    public boolean accept(FormattedCharSink formattedCharSink) {
+                        return formattedCharSink.accept(i, Style.EMPTY, i1);
+                    }
+                }).collect(Collectors.toList()), i, i1)));
+                Inner.RENDER_FORGE_PRE.register((poseStack, list, i, i1) -> EventResult.map2(render.renderTooltip(Graphics.get(poseStack), list.stream().map((Function<FormattedText, Render.ClientTooltipComponent>) formattedText -> new Render.ClientTooltipComponent() {
+                    @Override
+                    public boolean accept(FormattedCharSink formattedCharSink) {
+                        return formattedCharSink.accept(i, Style.EMPTY, i1);
+                    }
+                }).collect(Collectors.toList()), i, i1)));
+                #else
                 Inner.RENDER_VANILLA_PRE.register((poseStack, list, i, i1) -> EventResult.map2(render.renderTooltip(Graphics.get(poseStack), list.stream().map((Function<FormattedCharSequence, ClientTooltipComponent>) formattedCharSequence -> new ClientTooltipComponent() {
                     @Override
                     public int getHeight() {
@@ -67,6 +88,7 @@ public interface ClientTooltipEvent {
                         return font.width(formattedText);
                     }
                 }).collect(Collectors.toList()), i, i1)));
+                #endif
             }
 
             @Override
@@ -186,6 +208,11 @@ public interface ClientTooltipEvent {
 
     @Environment(EnvType.CLIENT)
     interface Render {
+        #if MC_VER == MC_1_16_5
+        interface ClientTooltipComponent extends FormattedCharSequence {
+        }
+        #endif
+
         EventResult renderTooltip(GuiGraphics graphics, List<? extends ClientTooltipComponent> texts, int x, int y);
     }
 
