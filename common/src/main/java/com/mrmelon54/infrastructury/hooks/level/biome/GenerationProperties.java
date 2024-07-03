@@ -9,7 +9,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
 
-#if MC_VER == MC_1_19_2
+#if MC_VER <= MC_1_19_2
 import net.minecraft.data.BuiltinRegistries;
 #endif
 
@@ -69,7 +69,7 @@ public interface GenerationProperties {
 
                 @Override
                 public Mutable addFeature(GenerationStep.Decoration var1, ResourceKey<PlacedFeature> var2) {
-                    #if MC_VER == MC_1_19_2
+                    #if MC_VER <= MC_1_19_2
                     mutable.addFeature(var1, BuiltinRegistries.PLACED_FEATURE.get(var2));
                     #else
                     mutable.addFeature(var1, var2);
@@ -85,7 +85,7 @@ public interface GenerationProperties {
 
                 @Override
                 public Mutable addCarver(GenerationStep.Carving var1, ResourceKey<ConfiguredWorldCarver<?>> var2) {
-                    #if MC_VER == MC_1_19_2
+                    #if MC_VER <= MC_1_19_2
                     mutable.addCarver(var1, BuiltinRegistries.CONFIGURED_CARVER.get(var2));
                     #else
                     mutable.addCarver(var1, var2);

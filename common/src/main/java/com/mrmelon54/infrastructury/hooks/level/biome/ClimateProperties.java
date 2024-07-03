@@ -33,7 +33,7 @@ public interface ClimateProperties {
 
                 @Override
                 public boolean hasPrecipitation() {
-                    #if MC_VER == MC_1_19_2
+                    #if MC_VER <= MC_1_19_2
                     return mutable.getPrecipitation() != Biome.Precipitation.NONE;
                     #else
                     return mutable.hasPrecipitation();
@@ -57,7 +57,7 @@ public interface ClimateProperties {
 
                 @Override
                 public Mutable setHasPrecipitation(boolean var1) {
-                    #if MC_VER == MC_1_19_2
+                    #if MC_VER <= MC_1_19_2
                     mutable.setPrecipitation(var1 ? Biome.Precipitation.RAIN : Biome.Precipitation.NONE);
                     #else
                     mutable.setHasPrecipitation(var1);
@@ -95,7 +95,7 @@ public interface ClimateProperties {
 
             @Override
             public boolean hasPrecipitation() {
-                #if MC_VER == MC_1_19_2
+                #if MC_VER <= MC_1_19_2
                 return climateProperties.getPrecipitation() != Biome.Precipitation.NONE;
                 #else
                 return climateProperties.hasPrecipitation();

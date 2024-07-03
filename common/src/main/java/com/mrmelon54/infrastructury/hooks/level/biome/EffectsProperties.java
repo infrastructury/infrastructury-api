@@ -116,7 +116,7 @@ public interface EffectsProperties {
 
                 @Override
                 public Optional<Holder<SoundEvent>> getAmbientLoopSound() {
-                    #if MC_VER == MC_1_19_2
+                    #if MC_VER <= MC_1_19_2
                     return mutable.getAmbientLoopSound().map(Holder::direct);
                     #else
                     return mutable.getAmbientLoopSound();
@@ -188,7 +188,7 @@ public interface EffectsProperties {
 
                 @Override
                 public Mutable setAmbientLoopSound(@Nullable Holder<SoundEvent> var1) {
-                    #if MC_VER == MC_1_19_2
+                    #if MC_VER <= MC_1_19_2
                     if (var1 != null && var1.isBound()) mutable.setAmbientLoopSound(var1.value());
                     #else
                     mutable.setAmbientLoopSound(var1);
@@ -266,7 +266,7 @@ public interface EffectsProperties {
 
             @Override
             public Optional<Holder<SoundEvent>> getAmbientLoopSound() {
-                #if MC_VER == MC_1_19_2
+                #if MC_VER <= MC_1_19_2
                 return effectsProperties.getAmbientLoopSound().map(Holder::direct);
                 #else
                 return effectsProperties.getAmbientLoopSound();
