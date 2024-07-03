@@ -1,13 +1,22 @@
 package com.mrmelon54.infrastructury.hooks.level.biome;
 
+import com.mojang.datafixers.util.Either;
+import com.mojang.serialization.Dynamic;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public interface GenerationProperties {
     remapped.architectury.hooks.level.biome.GenerationProperties architectury$convert();
@@ -65,7 +74,11 @@ public interface GenerationProperties {
 
                 @Override
                 public Mutable addFeature(GenerationStep.Decoration var1, ResourceKey<PlacedFeature> var2) {
+                    #if MC_VER == MC_1_19_2
+                    mutable.addFeature(var1, BuiltinRegistries.PLACED_FEATURE.get(var2));
+                    #else
                     mutable.addFeature(var1, var2);
+                    #endif
                     return this;
                 }
 
@@ -77,7 +90,11 @@ public interface GenerationProperties {
 
                 @Override
                 public Mutable addCarver(GenerationStep.Carving var1, ResourceKey<ConfiguredWorldCarver<?>> var2) {
+                    #if MC_VER == MC_1_19_2
+                    mutable.addCarver(var1, BuiltinRegistries.CONFIGURED_CARVER.get(var2));
+                    #else
                     mutable.addCarver(var1, var2);
+                    #endif
                     return this;
                 }
 

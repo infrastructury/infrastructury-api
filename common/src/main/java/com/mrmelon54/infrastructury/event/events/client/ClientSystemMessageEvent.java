@@ -9,8 +9,10 @@ import net.minecraft.network.chat.Component;
 
 @Environment(EnvType.CLIENT)
 public interface ClientSystemMessageEvent {
+    #if MC_VER > MC_1_19_2
     interface Inner extends remapped.architectury.event.events.client.ClientSystemMessageEvent {
     }
+    #endif
 
     PartialEvent<Received> RECEIVED = EventWrapper.partial(() -> {
         #if MC_VER > MC_1_19_2

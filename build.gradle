@@ -30,9 +30,16 @@ def writeBuildGradlePredefine(List<String> mcVers, int mcIndex) {
 static def generateForgeVersions(mc_versions) {
     def json = new JsonSlurper().parseText(mc_versions) as List<String>
     if (json.size() == 0) {
-        return "error"
+        throw new Exception("error invalid version list")
     }
-    return "[" + json[0] + "," + json[json.size() - 1] + "]"
+    def lastItem = json[json.size() - 1]
+    def lastItemSplit = lastItem.split("\\.")
+    if (lastItemSplit.size() != 3) {
+        throw new Exception("error invalid version number: " + lastItem)
+    }
+    lastItemSplit[lastItemSplit.size() - 1] = (lastItemSplit[lastItemSplit.size() - 1].toInteger() + 1).toString()
+    def topBound = lastItemSplit.join(".")
+    return "[" + json[0] + "," + topBound + ")"
 }
 
 project.gradle.ext.getProperties().each { prop ->

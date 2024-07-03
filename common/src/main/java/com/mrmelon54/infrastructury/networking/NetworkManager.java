@@ -71,7 +71,11 @@ public final class NetworkManager {
     }
 
     public static Packet<ClientGamePacketListener> createAddEntityPacket(Entity entity) {
+        #if MC_VER == MC_1_19_2
+        return (Packet<ClientGamePacketListener>) remapped.architectury.networking.NetworkManager.createAddEntityPacket(entity);
+        #else
         return remapped.architectury.networking.NetworkManager.createAddEntityPacket(entity);
+        #endif
     }
 
     public static Side serverToClient() {
