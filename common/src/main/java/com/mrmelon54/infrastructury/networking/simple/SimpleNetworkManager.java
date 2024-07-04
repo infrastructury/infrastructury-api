@@ -6,6 +6,9 @@ import com.mrmelon54.infrastructury.platform.Platform;
 import com.mrmelon54.infrastructury.utils.Env;
 import net.minecraft.resources.ResourceLocation;
 
+#if JAVA_8
+import java.util.ArrayList;
+#endif
 import java.util.List;
 
 public class SimpleNetworkManager {
@@ -20,7 +23,7 @@ public class SimpleNetworkManager {
     }
 
     public MessageType registerS2C(String id, MessageDecoder<BaseS2CMessage> decoder) {
-        return registerS2C(id, decoder, List.of());
+        return registerS2C(id, decoder, #if JAVA_8 new ArrayList<>() #else List.of() #endif );
     }
 
     public MessageType registerS2C(String id, MessageDecoder<BaseS2CMessage> decoder, List<PacketTransformer> transformers) {
@@ -35,7 +38,7 @@ public class SimpleNetworkManager {
     }
 
     public MessageType registerC2S(String id, MessageDecoder<BaseS2CMessage> decoder) {
-        return registerC2S(id, decoder, List.of());
+        return registerC2S(id, decoder, #if JAVA_8 new ArrayList<>() #else List.of() #endif );
     }
 
     public MessageType registerC2S(String id, MessageDecoder<BaseS2CMessage> decoder, List<PacketTransformer> transformers) {

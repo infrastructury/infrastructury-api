@@ -17,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class NetworkManager {
     private NetworkManager() {
@@ -41,7 +42,7 @@ public final class NetworkManager {
     }
 
     public static void registerReceiver(Side side, ResourceLocation id, List<PacketTransformer> packetTransformers, NetworkReceiver receiver) {
-        remapped.architectury.networking.NetworkManager.registerReceiver(side.side, id, packetTransformers.stream().map(x -> x.convert()).toList(), (friendlyByteBuf, packetContext) -> receiver.receive(friendlyByteBuf, PacketContext.convert(packetContext)));
+        remapped.architectury.networking.NetworkManager.registerReceiver(side.side, id, packetTransformers.stream().map(x -> x.convert()) #if JAVA_8 .collect(Collectors.toList()) #else .toList() #endif , (friendlyByteBuf, packetContext) -> receiver.receive(friendlyByteBuf, PacketContext.convert(packetContext)));
     }
 
     public static void collectPackets(PacketSink sink, Side side, ResourceLocation id, FriendlyByteBuf buf) {
