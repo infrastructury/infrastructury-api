@@ -26,9 +26,6 @@
     "entrypoints": {
       "init": [
         "com.mrmelon54.infrastructury.quilt.InfrastructuryQuilt"
-      ],
-      "modmenu": [
-        "com.mrmelon54.infrastructury.ModMenuIntegration"
       ]
     },
     "depends": [

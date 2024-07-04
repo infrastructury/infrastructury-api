@@ -11,14 +11,8 @@ import java.util.function.Supplier;
 
 public class Infrastructury {
     public static final String MOD_ID = "infrastructury";
-    public static ConfigStructure CONFIG = AutoConfig.register(ConfigStructure.class, JanksonConfigSerializer::new).get();
 
     public static void init() {
-        registerConfigScreen((mc, screen) -> createConfigScreen(screen).get());
-    }
-
-    public static Supplier<Screen> createConfigScreen(Screen screen) {
-        return AutoConfig.getConfigScreen(ConfigStructure.class, screen);
     }
 
     public static boolean showDebugScreen() {
