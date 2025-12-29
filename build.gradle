@@ -302,7 +302,7 @@ forgix {
             jarLocation = "build/libs/${project.archives_base_name}-neoforge-${rootProject.versionStr}.jar"
         }
 
-    removeDuplicate "com.mrmelon54.infrastructury"
+    //removeDuplicate "com.mrmelon54.infrastructury"
 }
 
 def getVersionMetadata() {
