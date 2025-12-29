@@ -277,32 +277,20 @@ allprojects {
     }
 }
 
-forgix {
-    group = "com.mrmelon54.infrastructury"
-    mergedJarName = rootProject.forgix_merged_jar
+tasks.register('moveJars', Sync) {
+    var outDir = layout.buildDirectory.dir("../buildAllJars")
+    into outDir
 
-    if (findProject(":fabric"))
-        fabric {
-            jarLocation = "build/libs/${project.archives_base_name}-fabric-${rootProject.versionStr}.jar"
-        }
+    println "Outputting collected jars to ${outDir.get()}"
+    mkdir(outDir)
 
-    if (findProject(":quilt"))
-        quilt {
-            jarLocation = "build/libs/${project.archives_base_name}-quilt-${rootProject.versionStr}.jar"
-        }
-
-    if (findProject(":forge"))
-        forge {
-            jarLocation = "build/libs/${project.archives_base_name}-forge-${rootProject.versionStr}.jar"
-        }
-
-    if (findProject(":neoforge"))
-        custom {
-            projectName = "neoforge"
-            jarLocation = "build/libs/${project.archives_base_name}-neoforge-${rootProject.versionStr}.jar"
-        }
-
-    //removeDuplicate "com.mrmelon54.infrastructury"
+    subprojects
+            .findAll { lib -> lib.name != "common" && lib.name != "mappings" }
+            .each { lib ->
+                var libJar = lib.layout.buildDirectory.file("libs/${rootProject.archives_base_name}-${lib.name}-${rootProject.versionStr}.jar")
+                from(libJar)
+                println "Copying from " + libJar.get()
+            }
 }
 
 def getVersionMetadata() {
